@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Executive Dashboard – IOCL Smart Refinery</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <style>
+    :root{--primary:#dd571c;
+        --primary-dark:#b8440f;
+        --primary-light:#f0784a;
+        --surface:#22262e;
+        --border:#2e3340;
+        --text:#e8eaf0;
+        --muted:#8b909e;
+        --accent-green:#22c55e;
+        --accent-yellow:#f59e0b;
+        --accent-red:#ef4444;
+        --accent-blue:#3b82f6;
+        
+        --brand:#dd571c;
+        --brand-dark:#b8430f;
+        --brand-light:#f07040;
+        --brand-faint:#fff2ec;
+        --dark:#1a1a2e;
+        --dark-mid:#16213e;
+        --light:#94a3b8;
+        --white:#ffffff;
+        --success:#10b981;
+        --warning:#f59e0b;
+        --danger:#ef4444;
+        --info:#3b82f6;
+        --sidebar-w:258px;
+        --nav-h:64px;
+        --radius:10px;
+        --radius-lg:16px;
+        --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06);
+        --tr:.22s cubic-bezier(.4,0,.2,1);
+        --bg: #0d0e10;
+        --bg2: #14161a;
+        --bg3: #1c1f25;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+          
+    
+        /* ===== NAVBAR ===== */
+        .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;height:var(--nav-h);background:var(--bg2);display:flex;align-items:center;padding:0 20px;gap:12px;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+        .nav-toggle{background:none;border:none;cursor:pointer;color:#fff;font-size:20px;padding:6px 8px;border-radius:6px;transition:background var(--tr);flex-shrink:0}
+        .nav-toggle:hover{background:rgba(255,255,255,.1)}
+        .nav-brand{display:flex;text-decoration:none;align-items:center;gap:10px;font-family:'Rajdhani',sans-serif;font-size:1.45rem;font-weight:700;color:#fff}
+        .nav-brand .logo{width:34px;height:34px;background:var(--brand);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px}
+        .nav-links{display:flex;align-items:center;gap:2px;margin-left:auto;}
+        .nav-links a{text-decoration:none;color:#9aaac4;font-size:13px;font-weight:500;padding:6px 11px;border-radius:6px;transition:all var(--tr)}
+        .nav-links a:hover,.nav-links a.active{color:#fff;background:rgba(221,87,28,.22)}
+        .nav-right{display:flex;align-items:center;gap:8px;margin-left:12px}
+        .nav-btn{width:36px;height:36px;border-radius:8px;border:none;background:rgba(255,255,255,.08);color:#ccc;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all var(--tr);position:relative}
+        .nav-btn:hover{background:var(--brand);color:#fff}
+        .nav-badge{position:absolute;top:-4px;right:-4px;background:var(--brand);color:#fff;font-size:9px;font-weight:700;padding:1px 4px;border-radius:10px;min-width:16px;text-align:center}
+        .nav-user{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.07);border-radius:8px;padding:5px 10px;cursor:pointer}
+        .nav-avatar{width:28px;height:28px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+        .nav-uname{color:#ddd;font-size:12px;font-weight:500}
+
+        .brand-text{display:flex;flex-direction:column;}
+        .brand-name{ font-size:32px;font-weight:700;font-family:'Poppins', sans-serif;line-height:1;}
+        .brand-nameX{color:var(--brand)}
+        .brand-subtitle{font-size:11px;font-weight:500;font-family:'Montserrat', sans-serif; /* Change this */color:#ddd7d7;letter-spacing:1px;text-transform: uppercase;}
+
+
+        /* ===== LAYOUT ===== */
+        .layout{display:flex;margin-top:var(--nav-h);flex:1}
+
+        /* ===== SIDEBAR ===== */
+        .sidebar{width:var(--sidebar-w);background:var(--bg2);position:fixed;top:var(--nav-h);bottom:0;left:0;overflow-y:auto;overflow-x:hidden;transition:width var(--tr);z-index:900;display:flex;flex-direction:column}
+        .sidebar.collapsed{width:62px}
+        .sidebar::-webkit-scrollbar{width:3px}
+        .sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:2px}
+        .sb-section{padding:6px 0}
+        .sb-label{padding:6px 18px;font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#4a5a74;white-space:nowrap;overflow:hidden}
+        .sidebar.collapsed .sb-label{opacity:0}
+        .sb-link{display:flex;align-items:center;gap:11px;padding:9px 18px;color:#7a90aa;font-size:13px;font-weight:500;border-left:3px solid transparent;transition:all var(--tr);white-space:nowrap;cursor:pointer;text-decoration:none}
+        .sb-link .si{font-size:16px;flex-shrink:0;width:20px;text-align:center}
+        .sb-link .sl{overflow:hidden;transition:opacity var(--tr)}
+        .sidebar.collapsed .sl{opacity:0;width:0}
+        .sb-link:hover{color:#fff;background:rgba(221,87,28,.12)}
+        .sb-link.active{color:var(--brand-light);border-left-color:var(--brand);background:rgba(221,87,28,.15)}
+        .sb-badge{margin-left:auto;background:var(--brand);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;flex-shrink:0}
+        .sidebar.collapsed .sb-badge{display:none}
+        /* ===== MAIN ===== */
+        .main{ overflow-x:hidden;margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;transition:margin-left var(--tr)}
+        .main.expanded{margin-left:62px}
+    
+    .page-header{padding:32px 48px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+    .page-title{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:#fff;}
+    .page-sub{font-size:13px;color:var(--muted);margin-top:2px;}
+    .refresh-btn{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:8px 18px;border-radius:8px;font-size:13px;cursor:pointer;transition:all .2s;}
+    .refresh-btn:hover{border-color:var(--primary);color:var(--primary);}
+    .section{padding:32px 48px; overflow-x:hidden;}
+    .section-title{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:20px;}
+    .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+    .kpi-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:22px;position:relative;overflow:hidden;}
+    .kpi-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+    .kpi-card.green::after{background:var(--accent-green);}
+    .kpi-card.orange::after{background:var(--primary);}
+    .kpi-card.yellow::after{background:var(--accent-yellow);}
+    .kpi-card.blue::after{background:var(--accent-blue);}
+    .kpi-icon{font-size:20px;margin-bottom:10px;}
+    .kpi-value{font-family:'Rajdhani',sans-serif;font-size:32px;font-weight:700;color:#fff;line-height:1;}
+    .kpi-label{font-size:12px;color:var(--muted);margin-top:4px;}
+    .kpi-delta{font-size:12px;margin-top:6px;}
+    .kpi-delta.up{color:var(--accent-green);}
+    .kpi-delta.down{color:var(--accent-red);}
+    .kpi-delta.warn{color:var(--accent-yellow);}
+    .charts-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
+    .chart-card{ overflow-x:hidden;background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:24px;}
+    .chart-card h3{font-size:14px;font-weight:600;color:var(--text);margin-bottom:18px;}
+    .chart-card canvas{max-height:220px;}
+    .ai-summary{background:rgba(221,87,28,0.06);border:1px solid rgba(221,87,28,0.2);border-radius:12px;padding:24px;}
+    .ai-summary-label{font-size:11px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+    .ai-bullet{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:14px;color:var(--text);line-height:1.5;}
+    .ai-bullet::before{content:'▸';color:var(--primary);flex-shrink:0;margin-top:1px;}
+   
+
+    
+    /* ===== FOOTER ===== */
+    footer{background:var(--bg2);color:#8fa0b8;padding:44px 40px 0;margin-top:auto}
+    .ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:36px;padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,.08)}
+    .ft-brand{font-family:'Rajdhani',sans-serif;font-size:1.4rem;font-weight:700;color:#fff;margin-bottom:9px}
+    .ft-brand span{color:var(--brand)}
+    .ft-desc{font-size:13px;line-height:1.7;max-width:270px}
+    .ft-col h4{color:#fff;font-size:12px;font-weight:700;margin-bottom:13px;text-transform:uppercase;letter-spacing:.8px}
+    .ft-col a{text-decoration: none;display:block;font-size:13px;margin-bottom:8px;transition:color var(--tr);color:#8fa0b8}
+    .ft-col a:hover{color:var(--brand-light)}
+
+    /* Subscribe */
+    .sub-box{display:flex;flex-direction:column;gap:9px}
+    .sub-box p{font-size:12px;color:#8fa0b8}
+    .sub-form{display:flex;gap:7px}
+    .sub-input{flex:1;padding:8px 12px;border-radius:8px;border:1.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;font-size:13px;outline:none;font-family:'Inter',sans-serif}
+    .sub-input::placeholder{color:#6b7a99}
+    .sub-input:focus{border-color:var(--brand)}
+    .sub-btn{padding:8px 16px;background:var(--brand);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:background var(--tr);font-family:'Inter',sans-serif}
+    .sub-btn:hover{background:var(--brand-dark)}
+    .ft-bottom{display:flex;align-items:center;justify-content:space-between;padding:14px 0;font-size:11px;flex-wrap:wrap;gap:8px}
+    .ft-links{display:flex;gap:14px}
+    .ft-links a{text-decoration: none;color:#8fa0b8;transition:color var(--tr)}.ft-links a:hover{color:var(--brand-light)}
+
+
+    /* ===== RESPONSIVE ===== */
+@media(max-width:1100px){.feat-grid{grid-template-columns:repeat(2,1fr)}.g4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.hero{flex-direction:column}.hero-visual{width:100%;flex:none}.hero-title{font-size:3rem}}
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);width:258px}.sidebar.open{transform:translateX(0)}
+  .main{margin-left:0!important}.nav-links{display:none}
+  .g2,.g4,.feat-grid{grid-template-columns:1fr}
+  .ft-grid{grid-template-columns:1fr}.content{padding:14px}
+}
+  </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+    <button class="nav-toggle" id="sidebarToggle">☰</button>
+    <a href="index.html" class="nav-brand">
+            <div class="logo">RX</div>
+
+            <div class="brand-text">
+                <span class="brand-name">Refine<span class="brand-nameX">X</span></span>
+                <span class="brand-subtitle">IOCL Guwahati</span>
+            </div>
+        </a>
+    <div class="nav-links">
+        <a href="index.html" >Home</a>
+        <a href="about.html" >About</a>
+        <a href="features.html" >Features</a>
+        <a href="dashboard.html" class="active">Dashboard</a>
+        <a href="team.html">Team</a>
+        <a href="contact.html">Contact</a>
+        <a id="profile-link" href="profile.html" style="display: none;">Profile</a>
+        <a id="logout-link" href="#" style="display: none;" onclick="logout()">Logout</a>
+        <a id="login-link" href="login.html">Login</a>
+        <a id="signup-link" href="signup.html">Sign Up</a>
+    </div>
+    <div class="nav-right">
+        <button class="nav-btn" onclick="location.href='alerts.html'" title="Alerts">🔔<span class="nav-badge">3</span></button>
+        <button class="nav-btn" onclick="location.href='ai-assistant.html'" title="AI Assistant">🤖</button>
+    
+    </div>
+    </nav>
+
+    <!-- LAYOUT -->
+    <div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+    <div class="sb-section">
+        <div class="sb-label">Main</div>
+        <a href="index.html" class="sb-link"><span class="si">🏠</span><span class="sl">Home</span></a>
+        <a href="about.html" class="sb-link"><span class="si">ℹ️</span><span class="sl">About</span></a>
+        <a href="features.html" class="sb-link"><span class="si">⭐</span><span class="sl">Features</span></a>
+        <a href="team.html" class="sb-link"><span class="si">👥</span><span class="sl">Team</span></a>
+        <a href="contact.html" class="sb-link"><span class="si">📬</span><span class="sl">Contact</span></a>
+    </div>
+    <div class="sb-section">
+        <div class="sb-label">Analytics</div>
+        <a href="dashboard.html" class="sb-link active"><span class="si">📊</span><span class="sl">Executive Dashboard</span></a>
+        <a href="production.html" class="sb-link"><span class="si">🏭</span><span class="sl">Production Analytics</span></a>
+        <a href="safety.html" class="sb-link"><span class="si">🛡️</span><span class="sl">Safety Dashboard</span></a>
+        <a href="energy.html" class="sb-link"><span class="si">⚡</span><span class="sl">Energy Analytics</span></a>
+        <a href="carbon.html" class="sb-link"><span class="si">🌿</span><span class="sl">Carbon Emissions</span></a>
+    </div>
+    <div class="sb-section">
+        <div class="sb-label">Operations</div>
+        <a href="equipment.html" class="sb-link"><span class="si">⚙️</span><span class="sl">Equipment Monitoring</span></a>
+        <a href="incidents.html" class="sb-link"><span class="si">🚨</span><span class="sl">Incident Management</span><span class="sb-badge">2</span></a>
+        <a href="maintenance.html" class="sb-link"><span class="si">🔧</span><span class="sl">Maintenance Planner</span></a>
+        <a href="alerts.html" class="sb-link"><span class="si">🔔</span><span class="sl">Alert Center</span><span class="sb-badge">3</span></a>
+    </div>
+    <div class="sb-section">
+        <div class="sb-label">AI & ML</div>
+        <a href="predictive.html" class="sb-link"><span class="si">🧠</span><span class="sl">Predictive Maintenance</span></a>
+        <a href="forecasting.html" class="sb-link"><span class="si">📈</span><span class="sl">Production Forecasting</span></a>
+        <a href="ai-insights.html" class="sb-link"><span class="si">💡</span><span class="sl">AI Insights Engine</span></a>
+        <a href="ai-assistant.html" class="sb-link"><span class="si">🤖</span><span class="sl">AI Assistant</span></a>
+        <a href="digital-twin.html" class="sb-link"><span class="si">🏗️</span><span class="sl">Digital Twin</span></a>
+    </div>
+    <div class="sb-section">
+        <div class="sb-label">More</div>
+        <a href="reports.html" class="sb-link"><span class="si">📄</span><span class="sl">Reports Center</span></a>
+        <a href="innovation.html" class="sb-link"><span class="si">🚀</span><span class="sl">Innovation Hub</span></a>
+        <a href="leaderboard.html" class="sb-link"><span class="si">🏆</span><span class="sl">Leaderboard</span></a>
+        <a href="admin.html" class="sb-link"><span class="si">🔐</span><span class="sl">Admin Panel</span></a>
+    </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main" id="mainArea">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Executive Dashboard</div>
+        <div class="page-sub">Last updated: <span id="ts"></span> · Guwahati Refinery, Assam</div>
+      </div>
+      <button class="refresh-btn" onclick="refreshData()">↻ Refresh</button>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="section">
+      <div class="section-title">Key Performance Indicators</div>
+      <div class="kpi-grid">
+        <div class="kpi-card orange"><div class="kpi-icon">🛢</div><div class="kpi-value">26.2K</div><div class="kpi-label">Crude Processed (MT/day)</div><div class="kpi-delta up">↑ 3.2% vs yesterday</div></div>
+        <div class="kpi-card green"><div class="kpi-icon">⛽</div><div class="kpi-value">8,740</div><div class="kpi-label">Petrol Production (KL/day)</div><div class="kpi-delta up">↑ On target</div></div>
+        <div class="kpi-card blue"><div class="kpi-icon">🚛</div><div class="kpi-value">11,200</div><div class="kpi-label">Diesel Production (KL/day)</div><div class="kpi-delta up">↑ 1.8% above plan</div></div>
+        <div class="kpi-card yellow"><div class="kpi-icon">🔥</div><div class="kpi-value">1,580</div><div class="kpi-label">LPG Production (MT/day)</div><div class="kpi-delta warn">→ On track</div></div>
+        <div class="kpi-card green"><div class="kpi-icon">🏭</div><div class="kpi-value">94.7%</div><div class="kpi-label">Plant Availability</div><div class="kpi-delta up">↑ 1.1% this week</div></div>
+        <div class="kpi-card green"><div class="kpi-icon">🛡️</div><div class="kpi-value">97.3</div><div class="kpi-label">Safety Score / 100</div><div class="kpi-delta up">✓ 1102 accident-free days</div></div>
+        <div class="kpi-card yellow"><div class="kpi-icon">⚡</div><div class="kpi-value">342</div><div class="kpi-label">Energy Usage (GJ/hr)</div><div class="kpi-delta warn">↑ 2.1% – review needed</div></div>
+        <div class="kpi-card orange"><div class="kpi-icon">❤️</div><div class="kpi-value">88</div><div class="kpi-label">Equipment Health Score</div><div class="kpi-delta warn">⚠ 2 assets flagged</div></div>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="section" style="padding-top:0;">
+      <div class="section-title">Trends</div>
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h3>📈 Production Trend (Last 7 Days)</h3>
+          <canvas id="prodChart"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3>⏱ Downtime Trend (Hrs/Day)</h3>
+          <canvas id="downtimeChart"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3>🔧 Maintenance Work Orders</h3>
+          <canvas id="maintChart"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3>🚨 Incident Trend</h3>
+          <canvas id="incidentChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Summary -->
+    <div class="section" style="padding-top:0;">
+      <div class="ai-summary">
+        <div class="ai-summary-label">🤖 AI Summary – Today</div>
+        <div class="ai-bullet">Plant efficiency improved by 5% this week compared to the previous 7-day average. CDU throughput is at peak performance.</div>
+        <div class="ai-bullet">Pump P101 (CDU Unit) shows elevated vibration readings. Recommend inspection within 48 hours to avoid unplanned shutdown.</div>
+        <div class="ai-bullet">Heat Exchanger HE-204 has increasing pressure drop — likely fouling. Schedule cleaning during next planned outage.</div>
+        <div class="ai-bullet">No critical safety incidents recorded in the past 30 days. Safety compliance at 97.3%.</div>
+        <div class="ai-bullet">Energy consumption is 2.1% above baseline. AI recommends reviewing steam traps in the Utilities section for possible leaks.</div>
+      </div>
+    </div>
+
+    
+    <!-- FOOTER -->
+  <footer>
+    <div class="ft-grid">
+      <div>
+        <div class="ft-brand">Refine<span>X</span></div>
+        <p class="ft-desc">AI-Powered Smart Refinery Intelligence Platform for IOCL Guwahati Refinery — Summer Internship 2026. Heritage Institute of Technology, Kolkata · CSE Dept.</p>
+      </div>
+      <div class="ft-col">
+        <h4>Platform</h4>
+        <a href="dashboard.html">Executive Dashboard</a>
+        <a href="production.html">Production Analytics</a>
+        <a href="equipment.html">Equipment Monitoring</a>
+        <a href="safety.html">Safety Dashboard</a>
+        <a href="digital-twin.html">Digital Twin</a>
+      </div>
+      <div class="ft-col">
+        <h4>AI & Tools</h4>
+        <a href="predictive.html">Predictive Maintenance</a>
+        <a href="forecasting.html">Production Forecasting</a>
+        <a href="ai-insights.html">AI Insights</a>
+        <a href="ai-assistant.html">AI Assistant</a>
+        <a href="reports.html">Reports Center</a>
+      </div>
+      <div class="ft-col">
+        <h4>Stay Updated</h4>
+        <div class="sub-box">
+          <p>Get alerts and platform updates via email.</p>
+          <form class="sub-form" id="subForm">
+            <input type="email" class="sub-input" placeholder="Your email address" id="subEmail"/>
+            <button type="submit" class="sub-btn">Subscribe</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="ft-bottom">
+      <span>© 2026 RefineX · Team: Prince Raj, Sneha Agarwal, Ayush Kumar, Abhinandan Kumar Rai · IOCL Guwahati Refinery</span>
+      <div class="ft-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="contact.html">Contact</a></div>
+    </div>
+  </footer>
+  </main>
+</div>
+
+<script>
+  document.getElementById('ts').textContent = new Date().toLocaleString('en-IN', {timeZone:'Asia/Kolkata'});
+
+  const chartDefaults = {
+    responsive: true,
+    plugins: { legend: { labels: { color: '#8b909e', font: { size: 11 } } } },
+    scales: {
+      x: { ticks: { color: '#8b909e', font:{size:10} }, grid: { color: '#2e3340' } },
+      y: { ticks: { color: '#8b909e', font:{size:10} }, grid: { color: '#2e3340' } }
+    }
+  };
+
+  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+  new Chart(document.getElementById('prodChart'), {
+    type:'line',
+    data:{ labels:days, datasets:[
+      { label:'Petrol (KL)', data:[8200,8450,8700,8600,8900,8740,8850], borderColor:'#dd571c', backgroundColor:'rgba(221,87,28,0.08)', tension:0.4, fill:true },
+      { label:'Diesel (KL)', data:[10800,11100,11000,11200,11400,11200,11350], borderColor:'#3b82f6', backgroundColor:'rgba(59,130,246,0.05)', tension:0.4, fill:true }
+    ]},
+    options: chartDefaults
+  });
+
+  new Chart(document.getElementById('downtimeChart'), {
+    type:'bar',
+    data:{ labels:days, datasets:[{ label:'Downtime (hrs)', data:[1.2,0.8,2.1,0.5,1.8,0.3,1.0], backgroundColor:'rgba(239,68,68,0.6)', borderColor:'#ef4444', borderWidth:1 }]},
+    options: chartDefaults
+  });
+
+  new Chart(document.getElementById('maintChart'), {
+    type:'bar',
+    data:{ labels:['Open','Planned','Overdue','Completed'], datasets:[{ label:'Work Orders', data:[12,28,3,45], backgroundColor:['#f59e0b','#3b82f6','#ef4444','#22c55e'] }]},
+    options:{ ...chartDefaults, scales:{ x:{ticks:{color:'#8b909e'},grid:{color:'#2e3340'}}, y:{ticks:{color:'#8b909e'},grid:{color:'#2e3340'}} } }
+  });
+
+  new Chart(document.getElementById('incidentChart'), {
+    type:'line',
+    data:{ labels:['Jan','Feb','Mar','Apr','May','Jun'], datasets:[{ label:'Incidents', data:[5,3,4,2,1,3], borderColor:'#f59e0b', backgroundColor:'rgba(245,158,11,0.08)', tension:0.4, fill:true }]},
+    options: chartDefaults
+  });
+
+  function refreshData() {
+    document.getElementById('ts').textContent = new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'});
+    document.querySelectorAll('.kpi-value').forEach(el => {
+      el.style.opacity='0.3';
+      setTimeout(()=>el.style.opacity='1', 400);
+    });
+  }
+
+
+  // ── Sidebar Toggle ──
+const sidebar = document.getElementById('sidebar');
+const mainArea = document.getElementById('mainArea');
+document.getElementById('sidebarToggle').addEventListener('click', () => {
+  if (window.innerWidth <= 768) { sidebar.classList.toggle('open'); }
+  else { sidebar.classList.toggle('collapsed'); mainArea.classList.toggle('expanded'); }
+});
+document.addEventListener('click', e => {
+  if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !document.getElementById('sidebarToggle').contains(e.target))
+    sidebar.classList.remove('open');
+});
+
+// ── Login & Logout ──
+document.addEventListener("DOMContentLoaded", () => {
+      const token = localStorage.getItem("token");
+      document.getElementById("profile-link").style.display = token ? "inline-block" : "none";
+      document.getElementById("logout-link").style.display = token ? "inline-block" : "none";
+      document.getElementById("login-link").style.display = token ? "none" : "inline-block";
+      document.getElementById("signup-link").style.display = token ? "none" : "inline-block";
+    });
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = "login.html";
+    }
+</script>
+</body>
+</html>

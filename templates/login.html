@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login — CropGuard AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --green-dark: #1a3a2a;
+      --green-mid: #2d6a4f;
+      --green-bright: #40916c;
+      --green-light: #74c69d;
+      --green-pale: #b7e4c7;
+      --green-faint: #d8f3dc;
+      --cream: #f8f5ef;
+      --cream-dark: #ede8df;
+      --brown: #6b4c35;
+      --amber: #e9a84c;
+      --text-dark: #1a2e1f;
+      --text-mid: #3a5445;
+      --text-muted: #7a9a85;
+      
+
+      --brand:#dd571c;
+      --brand-dark:#b8430f;
+      --brand-light:#f07040;
+      --brand-faint:#fff2ec;
+      --dark:#1a1a2e;
+      --dark-mid:#16213e;
+      --text:#1e293b;
+      --muted:#64748b;
+      --light:#94a3b8;
+      --border: #2e3340;
+      --surface:#f8fafc;
+      --white:#ffffff;
+      --success:#10b981;
+      --warning:#f59e0b;
+      --danger:#ef4444;
+      --info:#3b82f6;
+      --sidebar-w:258px;
+      --nav-h:64px;
+      --radius:10px;
+      --radius-lg:16px;
+      --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06);
+      --tr:.22s cubic-bezier(.4,0,.2,1);
+      --bg: #0d0e10;
+      --bg2: #14161a;
+      --bg3: #1c1f25;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      height: 120vh;
+      display: flex;
+      flex-direction: column;    
+    }
+ 
+
+       /* ===== NAVBAR ===== */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:1000;height:var(--nav-h);background:var(--bg2);display:flex;align-items:center;padding:0 20px;gap:12px;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.nav-toggle{background:none;border:none;cursor:pointer;color:#fff;font-size:20px;padding:6px 8px;border-radius:6px;transition:background var(--tr);flex-shrink:0}
+.nav-toggle:hover{background:rgba(255,255,255,.1)}
+.nav-brand{display:flex;text-decoration:none;align-items:center;gap:10px;font-family:'Rajdhani',sans-serif;font-size:1.45rem;font-weight:700;color:#fff}
+.nav-brand .logo{width:34px;height:34px;background:var(--brand);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px}
+.nav-links{display:flex;align-items:center;gap:2px;margin-left:auto;}
+.nav-links a{text-decoration:none;color:#9aaac4;font-size:13px;font-weight:500;padding:6px 11px;border-radius:6px;transition:all var(--tr)}
+.nav-links a:hover,.nav-links a.active{color:#fff;background:rgba(221,87,28,.22)}
+.nav-right{display:flex;align-items:center;gap:8px;margin-left:12px}
+.nav-btn{width:36px;height:36px;border-radius:8px;border:none;background:rgba(255,255,255,.08);color:#ccc;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all var(--tr);position:relative}
+.nav-btn:hover{background:var(--brand);color:#fff}
+.nav-badge{position:absolute;top:-4px;right:-4px;background:var(--brand);color:#fff;font-size:9px;font-weight:700;padding:1px 4px;border-radius:10px;min-width:16px;text-align:center}
+.nav-user{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.07);border-radius:8px;padding:5px 10px;cursor:pointer}
+.nav-avatar{width:28px;height:28px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.nav-uname{color:#ddd;font-size:12px;font-weight:500}
+
+.brand-text{display:flex;flex-direction:column;}
+.brand-name{ font-size:32px;font-weight:700;font-family:'Poppins', sans-serif;line-height:1;}
+.brand-nameX{color:var(--brand)}
+.brand-subtitle{font-size:11px;font-weight:500;font-family:'Montserrat', sans-serif; /* Change this */color:#ddd7d7;letter-spacing:1px;text-transform: uppercase;}
+
+
+/* ===== LAYOUT ===== */
+.layout{display:flex;flex:1;margin-top:var(--nav-h)}
+
+/* ===== SIDEBAR ===== */
+.sidebar{width:var(--sidebar-w);background:var(--bg2);position:fixed;top:var(--nav-h);bottom:0;left:0;overflow-y:auto;overflow-x:hidden;transition:width var(--tr);z-index:900;display:flex;flex-direction:column}
+.sidebar.collapsed{width:62px}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:2px}
+.sb-section{padding:6px 0}
+.sb-label{padding:6px 18px;font-size:10px;font-weight:750;letter-spacing:1.4px;text-transform:uppercase;color:#4a5a74;white-space:nowrap;overflow:hidden}
+.sidebar.collapsed .sb-label{opacity:0}
+.sb-link{display:flex;align-items:center;gap:11px;padding:9px 18px;color:#7a90aa;font-size:13px;font-weight:500;border-left:3px solid transparent;transition:all var(--tr);white-space:nowrap;cursor:pointer;text-decoration:none}
+.sb-link .si{font-size:16px;flex-shrink:0;width:20px;text-align:center}
+.sb-link .sl{font-weight:700;overflow:hidden;transition:opacity var(--tr)}
+.sidebar.collapsed .sl{opacity:0;width:0}
+.sb-link:hover{color:#fff;background:rgba(221,87,28,.12)}
+.sb-link.active{color:var(--brand-light);border-left-color:var(--brand);background:rgba(221,87,28,.15)}
+.sb-badge{margin-left:auto;background:var(--brand);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;flex-shrink:0}
+.sidebar.collapsed .sb-badge{display:none}
+/* ===== MAIN ===== */
+.main{margin-left:var(--sidebar-w);flex:1;justify-content: center;align-items: center;
+      padding-top: 190px;display:flex;flex-direction:column;
+      transition:margin-left var(--tr);
+       background-image:url('../static/images/login.png');
+      background-size: cover;
+      background-position: center;
+      background-position-y: 5px;
+    }
+.main.expanded{margin-left:62px}
+
+    /* hidden when logged in */
+    #nav-profile, #nav-logout { display: none; }
+
+    /* Main login section */
+  
+    .login-container {
+     
+      padding: 30px 25px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      width: 380px;
+      max-width: 100%;
+      text-align: center;
+      backdrop-filter: blur(30px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .login-container h2 {
+      margin-bottom: 20px;
+      color: #236e5f;
+    }
+    .login-container input {
+      width: 100%;
+      padding: 10px;
+      
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    .login-container button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      background-color: #236e5f;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .login-container button:hover {
+      background-color: #1e5d50;
+    }
+    .error-message {
+      color: red;
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+    .success-message {
+      color: green;
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+
+
+
+    /* ===== FOOTER ===== */
+    footer{background:var(--bg2);color:#8fa0b8;padding:44px 40px 0;margin-top:auto;width: 100%;margin-top: 200px;}
+    .ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:36px;padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,.08)}
+    .ft-brand{font-family:'Rajdhani',sans-serif;font-size:1.4rem;font-weight:700;color:#fff;margin-bottom:9px}
+    .ft-brand span{color:var(--brand)}
+    .ft-desc{font-size:13px;line-height:1.7;max-width:270px}
+    .ft-col h4{color:#fff;font-size:12px;font-weight:700;margin-bottom:13px;text-transform:uppercase;letter-spacing:.8px}
+    .ft-col a{text-decoration: none;display:block;font-size:13px;margin-bottom:8px;transition:color var(--tr);color:#8fa0b8}
+    .ft-col a:hover{color:var(--brand-light)}
+   
+
+    /* Subscribe */
+    .sub-box{display:flex;flex-direction:column;gap:9px}
+    .sub-box p{font-size:12px;color:#8fa0b8}
+    .sub-form{display:flex;gap:7px}
+    .sub-input{flex:1;padding:8px 12px;border-radius:8px;border:1.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;font-size:13px;outline:none;font-family:'Inter',sans-serif}
+    .sub-input::placeholder{color:#6b7a99}
+    .sub-input:focus{border-color:var(--brand)}
+    .sub-btn{padding:8px 16px;background:var(--brand);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:background var(--tr);font-family:'Inter',sans-serif}
+    .sub-btn:hover{background:var(--brand-dark)}
+    .ft-bottom{display:flex;align-items:center;justify-content:space-between;padding:14px 0;font-size:11px;flex-wrap:wrap;gap:8px}
+    .ft-links{display:flex;gap:14px}
+    .ft-links a{text-decoration: none;color:#8fa0b8;transition:color var(--tr)}.ft-links a:hover{color:var(--brand-light)}
+
+
+    /* ===== RESPONSIVE ===== */
+@media(max-width:1100px){.feat-grid{grid-template-columns:repeat(2,1fr)}.g4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.hero{flex-direction:column}.hero-visual{width:100%;flex:none}.hero-title{font-size:3rem}}
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);width:258px}.sidebar.open{transform:translateX(0)}
+  .main{margin-left:0!important}.nav-links{display:none}
+  .g2,.g4,.feat-grid{grid-template-columns:1fr}
+  .ft-grid{grid-template-columns:1fr}.content{padding:14px}
+}
+
+
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════ NAVBAR ═══════════════ -->
+<nav class="navbar">
+  <button class="nav-toggle" id="sidebarToggle">☰</button>
+  <a href="index.html" class="nav-brand">
+        <div class="logo">RX</div>
+
+        <div class="brand-text">
+            <span class="brand-name">Refine<span class="brand-nameX">X</span></span>
+            <span class="brand-subtitle">IOCL Guwahati</span>
+        </div>
+    </a>
+  <div class="nav-links">
+    <a href="index.html" >Home</a>
+    <a href="about.html">About</a>
+    <a href="features.html">Features</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="team.html">Team</a>
+    <a href="contact.html">Contact</a>
+    <a id="profile-link" href="profile.html" style="display: none;">Profile</a>
+        <a id="logout-link" href="#" style="display: none;" onclick="logout()">Logout</a>
+        <a id="login-link" href="login.html"class="active">Login</a>
+        <a id="signup-link" href="signup.html">Sign Up</a>
+  </div>
+  <div class="nav-right">
+    <button class="nav-btn" onclick="location.href='alerts.html'" title="Alerts">🔔<span class="nav-badge">3</span></button>
+    <button class="nav-btn" onclick="location.href='ai-assistant.html'" title="AI Assistant">🤖</button>
+  </div>
+</nav>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sb-section">
+    <div class="sb-label">Main</div>
+    <a href="index.html" class="sb-link "><span class="si">🏠</span><span class="sl">Home</span></a>
+    <a href="about.html" class="sb-link "><span class="si">ℹ️</span><span class="sl">About</span></a>
+    <a href="features.html" class="sb-link"><span class="si">⭐</span><span class="sl">Features</span></a>
+    <a href="team.html" class="sb-link"><span class="si">👥</span><span class="sl">Team</span></a>
+    <a href="contact.html" class="sb-link"><span class="si">📬</span><span class="sl">Contact</span></a>
+  </div>
+  <div class="sb-section">
+    <div class="sb-label">Analytics</div>
+    <a href="dashboard.html" class="sb-link"><span class="si">📊</span><span class="sl">Executive Dashboard</span></a>
+    <a href="production.html" class="sb-link"><span class="si">🏭</span><span class="sl">Production Analytics</span></a>
+    <a href="safety.html" class="sb-link"><span class="si">🛡️</span><span class="sl">Safety Dashboard</span></a>
+    <a href="energy.html" class="sb-link"><span class="si">⚡</span><span class="sl">Energy Analytics</span></a>
+    <a href="carbon.html" class="sb-link"><span class="si">🌿</span><span class="sl">Carbon Emissions</span></a>
+  </div>
+  <div class="sb-section">
+    <div class="sb-label">Operations</div>
+    <a href="equipment.html" class="sb-link"><span class="si">⚙️</span><span class="sl">Equipment Monitoring</span></a>
+    <a href="incidents.html" class="sb-link"><span class="si">🚨</span><span class="sl">Incident Management</span><span class="sb-badge">2</span></a>
+    <a href="maintenance.html" class="sb-link"><span class="si">🔧</span><span class="sl">Maintenance Planner</span></a>
+    <a href="alerts.html" class="sb-link"><span class="si">🔔</span><span class="sl">Alert Center</span><span class="sb-badge">3</span></a>
+  </div>
+  <div class="sb-section">
+    <div class="sb-label">AI & ML</div>
+    <a href="predictive.html" class="sb-link"><span class="si">🧠</span><span class="sl">Predictive Maintenance</span></a>
+    <a href="forecasting.html" class="sb-link"><span class="si">📈</span><span class="sl">Production Forecasting</span></a>
+    <a href="ai-insights.html" class="sb-link"><span class="si">💡</span><span class="sl">AI Insights Engine</span></a>
+    <a href="ai-assistant.html" class="sb-link"><span class="si">🤖</span><span class="sl">AI Assistant</span></a>
+    <a href="digital-twin.html" class="sb-link"><span class="si">🏗️</span><span class="sl">Digital Twin</span></a>
+  </div>
+  <div class="sb-section">
+    <div class="sb-label">More</div>
+    <a href="reports.html" class="sb-link"><span class="si">📄</span><span class="sl">Reports Center</span></a>
+    <a href="innovation.html" class="sb-link"><span class="si">🚀</span><span class="sl">Innovation Hub</span></a>
+    <a href="leaderboard.html" class="sb-link"><span class="si">🏆</span><span class="sl">Leaderboard</span></a>
+    <a href="admin.html" class="sb-link"><span class="si">🔐</span><span class="sl">Admin Panel</span></a>
+  </div>
+</aside>
+
+    <!-- MAIN -->
+  <main class="main" id="mainArea">
+    <div class="login-container">
+      <h2>Login</h2>
+      <input type="email" id="email" placeholder="Email" />
+      <input type="password" id="password" placeholder="Password" />
+      <button onclick="login()">Login</button>
+      <p id="status-message" class="error-message"></p>
+    </div>
+
+
+    <!-- ═══════════════ FOOTER ═══════════════ -->
+
+  <footer >
+    <div class="ft-grid">
+      <div>
+        <div class="ft-brand">Refine<span>X</span></div>
+        <p class="ft-desc">AI-Powered Smart Refinery Intelligence Platform for IOCL Guwahati Refinery — Summer Internship 2026. Heritage Institute of Technology, Kolkata · CSE Dept.</p>
+      </div>
+      <div class="ft-col">
+        <h4>Platform</h4>
+        <a href="dashboard.html">Executive Dashboard</a>
+        <a href="production.html">Production Analytics</a>
+        <a href="equipment.html">Equipment Monitoring</a>
+        <a href="safety.html">Safety Dashboard</a>
+        <a href="digital-twin.html">Digital Twin</a>
+      </div>
+      <div class="ft-col">
+        <h4>AI & Tools</h4>
+        <a href="predictive.html">Predictive Maintenance</a>
+        <a href="forecasting.html">Production Forecasting</a>
+        <a href="ai-insights.html">AI Insights</a>
+        <a href="ai-assistant.html">AI Assistant</a>
+        <a href="reports.html">Reports Center</a>
+      </div>
+      <div class="ft-col">
+        <h4>Stay Updated</h4>
+        <div class="sub-box">
+          <p>Get alerts and platform updates via email.</p>
+          <form class="sub-form" id="subForm">
+            <input type="email" class="sub-input" placeholder="Your email address" id="subEmail"/>
+            <button type="submit" class="sub-btn">Subscribe</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="ft-bottom">
+      <span>© 2026 RefineX · Team: Prince Raj, Sneha Agarwal, Ayush Kumar, Abhinandan Kumar Rai · IOCL Guwahati Refinery</span>
+      <div class="ft-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="contact.html">Contact</a></div>
+    </div>
+  </footer>
+
+  </main>
+
+</div> 
+
+  <script>
+    // Nav token display
+    document.addEventListener("DOMContentLoaded", () => {
+      const token = localStorage.getItem("token");
+      document.getElementById("profile-link").style.display = token ? "inline-block" : "none";
+      document.getElementById("logout-link").style.display = token ? "inline-block" : "none";
+      document.getElementById("login-link").style.display = token ? "none" : "inline-block";
+      document.getElementById("signup-link").style.display = token ? "none" : "inline-block";
+    });
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = "login.html";
+    }
+
+    function login() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const statusMessage = document.getElementById("status-message");
+      const button = document.querySelector("button");
+
+      statusMessage.textContent = "";
+      statusMessage.className = "error-message";
+
+      if (!email || !password) {
+        statusMessage.textContent = "Please fill in both fields.";
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Logging in...";
+
+      fetch("http://localhost:5000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      })
+      .then(response => response.json())
+      .then(data => {
+        button.disabled = false;
+        button.textContent = "Login";
+
+        if (data.token) {
+          statusMessage.className = "success-message";
+          statusMessage.textContent = "✅ Login successful! Redirecting...";
+
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("userEmail", email);
+          localStorage.setItem("userName", data.name || email);
+
+          setTimeout(() => { window.location.href = "index.html"; }, 1000);
+        } else {
+          statusMessage.className = "error-message";
+          statusMessage.textContent = data.error || "Login failed. Please try again.";
+        }
+      })
+      .catch(error => {
+        button.disabled = false;
+        button.textContent = "Login";
+        statusMessage.className = "error-message";
+        statusMessage.textContent = "Error: " + error.message;
+      });
+    }
+
+     // ── Sidebar Toggle ──
+const sidebar = document.getElementById('sidebar');
+const mainArea = document.getElementById('mainArea');
+
+document.getElementById('sidebarToggle').addEventListener('click', () => {
+  if (window.innerWidth <= 768) { sidebar.classList.toggle('open'); }
+  else { sidebar.classList.toggle('collapsed'); mainArea.classList.toggle('expanded');
+    
+   }
+});
+document.addEventListener('click', e => {
+  if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !document.getElementById('sidebarToggle').contains(e.target))
+    sidebar.classList.remove('open');
+});
+  </script>
+</body>
+</html>

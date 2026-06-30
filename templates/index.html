@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>RefineX – Home | IOCL Guwahati</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+/* ===== RESET & BASE ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;font-size:14px;color:#1e293b;background:var(--bg);display:flex;flex-direction:column;min-height:100vh}
+a{text-decoration:none;color:inherit}
+ul{list-style:none}
+h1,h2,h3,h4,h5{font-family:'Rajdhani',sans-serif;font-weight:700;line-height:1.2}
+p{line-height:1.65;color:#64748b}
+
+/* ===== VARIABLES ===== */
+:root{
+  --brand:#dd571c;
+  --brand-dark:#b8430f;
+  --brand-light:#f07040;
+  --brand-faint:#fff2ec;
+  --dark:#1a1a2e;
+  --dark-mid:#16213e;
+  --text:#1e293b;
+  --muted:#64748b;
+  --light:#94a3b8;
+  --border: #2e3340;
+  --surface:#f8fafc;
+  --white:#ffffff;
+  --success:#10b981;
+  --warning:#f59e0b;
+  --danger:#ef4444;
+  --info:#3b82f6;
+  --sidebar-w:258px;
+  --nav-h:64px;
+  --radius:10px;
+  --radius-lg:16px;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06);
+  --tr:.22s cubic-bezier(.4,0,.2,1);
+  --bg: #0d0e10;
+  --bg2: #14161a;
+  --bg3: #1c1f25;
+}
+
+/* ===== NAVBAR ===== */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:1000;height:var(--nav-h);background:var(--bg2);display:flex;align-items:center;padding:0 20px;gap:12px;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.nav-toggle{background:none;border:none;cursor:pointer;color:#fff;font-size:20px;padding:6px 8px;border-radius:6px;transition:background var(--tr);flex-shrink:0}
+.nav-toggle:hover{background:rgba(255,255,255,.1)}
+.nav-brand{display:flex;align-items:center;gap:10px;font-family:'Rajdhani',sans-serif;font-size:1.45rem;font-weight:700;color:#fff}
+.nav-brand .logo{width:34px;height:34px;background:var(--brand);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px}
+.nav-links{display:flex;align-items:center;gap:2px;margin-left:auto}
+.nav-links a{color:#9aaac4;font-size:13px;font-weight:500;padding:6px 11px;border-radius:6px;transition:all var(--tr)}
+.nav-links a:hover,.nav-links a.active{color:#fff;background:rgba(221,87,28,.22)}
+.nav-right{display:flex;align-items:center;gap:8px;margin-left:12px}
+.nav-btn{width:36px;height:36px;border-radius:8px;border:none;background:rgba(255,255,255,.08);color:#ccc;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all var(--tr);position:relative}
+.nav-btn:hover{background:var(--brand);color:#fff}
+.nav-badge{position:absolute;top:-4px;right:-4px;background:var(--brand);color:#fff;font-size:9px;font-weight:700;padding:1px 4px;border-radius:10px;min-width:16px;text-align:center}
+.nav-user{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.07);border-radius:8px;padding:5px 10px;cursor:pointer}
+.nav-avatar{width:28px;height:28px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.nav-uname{color:#ddd;font-size:12px;font-weight:500}
+
+.brand-text{display:flex;flex-direction:column;}
+.brand-name{ font-size:32px;font-weight:700;font-family:'Poppins', sans-serif;line-height:1;}
+.brand-nameX{color:var(--brand)}
+.brand-subtitle{font-size:11px;font-weight:500;font-family:'Montserrat', sans-serif; /* Change this */color:#ddd7d7;letter-spacing:1px;text-transform: uppercase;}
+
+
+/* ===== LAYOUT ===== */
+.layout{display:flex;margin-top:var(--nav-h);flex:1}
+
+/* ===== SIDEBAR ===== */
+.sidebar{width:var(--sidebar-w);background:var(--bg2);position:fixed;top:var(--nav-h);bottom:0;left:0;overflow-y:auto;overflow-x:hidden;transition:width var(--tr);z-index:900;display:flex;flex-direction:column}
+.sidebar.collapsed{width:62px}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:2px}
+.sb-section{padding:6px 0}
+.sb-label{padding:6px 18px;font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#4a5a74;white-space:nowrap;overflow:hidden}
+.sidebar.collapsed .sb-label{opacity:0}
+.sb-link{display:flex;align-items:center;gap:11px;padding:9px 18px;color:#7a90aa;font-size:13px;font-weight:500;border-left:3px solid transparent;transition:all var(--tr);white-space:nowrap;cursor:pointer;text-decoration:none}
+.sb-link .si{font-size:16px;flex-shrink:0;width:20px;text-align:center}
+.sb-link .sl{overflow:hidden;transition:opacity var(--tr)}
+.sidebar.collapsed .sl{opacity:0;width:0}
+.sb-link:hover{color:#fff;background:rgba(221,87,28,.12)}
+.sb-link.active{color:var(--brand-light);border-left-color:var(--brand);background:rgba(221,87,28,.15)}
+.sb-badge{margin-left:auto;background:var(--brand);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;flex-shrink:0}
+.sidebar.collapsed .sb-badge{display:none}
+
+/* ===== MAIN ===== */
+.main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;transition:margin-left var(--tr)}
+.main.expanded{margin-left:62px}
+
+/* ===== HERO ===== */
+.hero{background:var(--bg);display:flex;align-items:center;justify-content:space-between;gap:36px;padding:56px 40px 48px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 80% at 80% 50%,rgba(221,87,28,.2) 0%,transparent 70%)}
+.hero-content{flex:1;max-width:510px;position:relative;z-index:1}
+.hero-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.hero-tag{background:rgba(221,87,28,.18);color:var(--brand-light);border:1px solid rgba(221,87,28,.3);border-radius:6px;padding:4px 11px;font-size:12px;font-weight:600}
+.hero-title{font-size:4.4rem;color:#fff;line-height:1;margin-bottom:16px}
+.hero-title span{color:var(--brand)}
+.hero-desc{color:#94a3b8;font-size:15px;line-height:1.7;margin-bottom:28px}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.btn-hero-primary{background:var(--brand);color:#fff;border:none;padding:10px 22px;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;transition:all var(--tr);display:inline-flex;align-items:center;gap:7px}
+.btn-hero-primary:hover{background:var(--brand-dark);transform:translateY(-1px);box-shadow:0 6px 20px rgba(221,87,28,.4)}
+.btn-hero-outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.3);padding:10px 22px;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;transition:all var(--tr);display:inline-flex;align-items:center;gap:7px}
+.btn-hero-outline:hover{border-color:#fff;background:rgba(255,255,255,.07)}
+.hero-live{display:flex;align-items:center;gap:8px;font-size:13px;color:#94a3b8}
+.hero-live strong{color:var(--success)}
+.live-dot{width:9px;height:9px;border-radius:50%;background:var(--success);box-shadow:0 0 0 3px rgba(16,185,129,.25);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 3px rgba(16,185,129,.25)}50%{box-shadow:0 0 0 6px rgba(16,185,129,.08)}}
+
+/* Plant card */
+.hero-visual{flex:0 0 350px;position:relative;z-index:1}
+.plant-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius-lg);padding:20px;backdrop-filter:blur(10px)}
+.pc-header{color:#fff;font-weight:700;font-size:14px;margin-bottom:14px;font-family:'Rajdhani',sans-serif}
+.plant-units{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.pu{background:rgba(255,255,255,.05);border-radius:8px;padding:10px 12px;border:1px solid rgba(255,255,255,.07)}
+.pu-n{font-weight:700;font-size:12px;color:#fff;font-family:'Rajdhani',sans-serif}
+.pu-s{font-size:11px;margin-top:3px}
+.pu.g .pu-s{color:var(--success)}
+.pu.y .pu-s{color:var(--warning)}
+.chart-wrap{height:100px}
+
+/* ===== PAGE CONTENT ===== */
+.content{flex:1;padding:26px}
+
+/* KPI Grid */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:14px;margin-bottom:22px}
+.kpi{background:var(--bg2);border-radius:var(--radius);padding:17px 18px;border:1px solid var(--border);box-shadow:var(--shadow);position:relative;overflow:hidden;transition:transform var(--tr)}
+.kpi:hover{transform:translateY(-2px)}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--brand)}
+.kpi.s::before{background:var(--success)}.kpi.w::before{background:var(--warning)}.kpi.i::before{background:var(--info)}.kpi.d::before{background:var(--danger)}
+.kpi-lbl{font-size:11px;font-weight:600;color:var(--white);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px}
+.kpi-val{font-size:1.8rem;font-weight:700;font-family:'Rajdhani',sans-serif;color:var(--light);line-height:1}
+.kpi-val span{font-size:1rem;color:var(--muted)}
+.kpi-delta{font-size:12px;margin-top:6px}
+.kpi-delta.up{color:var(--success)}.kpi-delta.dn{color:var(--danger)}
+.kpi-ico{position:absolute;right:14px;top:50%;color:translateY(-50%);font-size:30px;}
+
+/* Cards */
+.card{background:var(--bg2);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;border:1px solid var(--border)}
+.card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.card-title{font-size:1rem;font-weight:700;color:var(--white);font-family:'Rajdhani',sans-serif}
+.card-sub{font-size:11px;color:var(--light);margin-top:2px}
+
+/* Grid */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:22px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+
+/* Alerts */
+.al-item{display:flex;align-items:flex-start;gap:11px;padding:11px 14px;border-radius:8px;margin-bottom:9px;border-left:3px solid}
+.al-item.crit{background:#fff1f2;border-color:var(--danger)}.al-item.high{background:#fffbeb;border-color:var(--warning)}.al-item.med{background:#eff6ff;border-color:var(--info)}
+.al-ico{font-size:17px;flex-shrink:0}
+.al-title{font-weight:600;font-size:13px;color:var(--text)}
+.al-meta{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* Insight list */
+.ins-list{display:flex;flex-direction:column;gap:11px}
+.ins-item{display:flex;align-items:flex-start;gap:11px}
+.ins-ico{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.ins-title{font-weight:600;font-size:13px;color:var(--white)}
+.ins-meta{font-size:11px;color:var(--light);margin-top:2px}
+
+/* Feature cards */
+.feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:22px}
+.feat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:17px 15px;box-shadow:var(--shadow);transition:all var(--tr);display:flex;flex-direction:column;gap:6px;cursor:pointer}
+.feat-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(221,87,28,.15);border-color:var(--brand)}
+.fc-ico{font-size:25px}
+.fc-title{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1rem;color:var(--white)}
+.fc-desc{font-size:12px;color:var(--light);line-height:1.5;flex:1}
+.fc-stars{font-size:11px;margin-top:4px}
+
+/* Quick Nav */
+.qn-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;transition:all var(--tr);box-shadow:var(--shadow);cursor:pointer}
+.qn-card:hover{background:var(--brand);border-color:var(--brand);transform:translateY(-2px)}
+.qn-card:hover .qn-lbl{color:#fff}
+.qn-ico{font-size:26px}
+.qn-lbl{font-weight:700;font-size:13px;color:var(--light);font-family:'Rajdhani',sans-serif;transition:color var(--tr)}
+
+/* Section title */
+.sec-title{font-family:'Rajdhani',sans-serif;font-size:1.2rem;font-weight:700;color:var(--white);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--light)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all var(--tr)}
+.btn-primary{background:var(--brand);color:#fff}.btn-primary:hover{background:var(--brand-dark)}
+.btn-outline{background:transparent;color:var(--brand);border:1.5px solid var(--brand)}.btn-outline:hover{background:var(--brand);color:#fff}
+.btn-sm{padding:5px 12px;font-size:12px}
+
+/* ===== FOOTER ===== */
+footer{background:var(--bg2);color:#8fa0b8;padding:44px 40px 0;margin-top:auto}
+.ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:36px;padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,.08)}
+.ft-brand{font-family:'Rajdhani',sans-serif;font-size:1.4rem;font-weight:700;color:#fff;margin-bottom:9px}
+.ft-brand span{color:var(--brand)}
+.ft-desc{font-size:13px;line-height:1.7;max-width:270px}
+.ft-col h4{color:#fff;font-size:12px;font-weight:700;margin-bottom:13px;text-transform:uppercase;letter-spacing:.8px}
+.ft-col a{display:block;font-size:13px;margin-bottom:8px;transition:color var(--tr);color:#8fa0b8}
+.ft-col a:hover{color:var(--brand-light)}
+/* Subscribe */
+.sub-box{display:flex;flex-direction:column;gap:9px}
+.sub-box p{font-size:12px;color:#8fa0b8}
+.sub-form{display:flex;gap:7px}
+.sub-input{flex:1;padding:8px 12px;border-radius:8px;border:1.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;font-size:13px;outline:none;font-family:'Inter',sans-serif}
+.sub-input::placeholder{color:#6b7a99}
+.sub-input:focus{border-color:var(--brand)}
+.sub-btn{padding:8px 16px;background:var(--brand);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:background var(--tr);font-family:'Inter',sans-serif}
+.sub-btn:hover{background:var(--brand-dark)}
+.ft-bottom{display:flex;align-items:center;justify-content:space-between;padding:14px 0;font-size:11px;flex-wrap:wrap;gap:8px}
+.ft-links{display:flex;gap:14px}
+.ft-links a{color:#8fa0b8;transition:color var(--tr)}.ft-links a:hover{color:var(--brand-light)}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1100px){.feat-grid{grid-template-columns:repeat(2,1fr)}.g4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.hero{flex-direction:column}.hero-visual{width:100%;flex:none}.hero-title{font-size:3rem}}
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);width:258px}.sidebar.open{transform:translateX(0)}
+  .main{margin-left:0!important}.nav-links{display:none}
+  .g2,.g4,.feat-grid{grid-template-columns:1fr}
+  .ft-grid{grid-template-columns:1fr}.content{padding:14px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <button class="nav-toggle" id="sidebarToggle">☰</button>
+  <a href="index.html" class="nav-brand">
+        <div class="logo">RX</div>
+
+        <div class="brand-text">
+            <span class="brand-name">Refine<span class="brand-nameX">X</span></span>
+            <span class="brand-subtitle">IOCL Guwahati</span>
+        </div>
+    </a>
+  <div class="nav-links">
+    <a href="index.html" class="active">Home</a>
+    <a href="about.html">About</a>
+    <a href="features.html">Features</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="team.html">Team</a>
+    <a href="contact.html">Contact</a>
+    <a id="profile-link" href="profile.html" style="display: none;">Profile</a>
+        <a id="logout-link" href="#" style="display: none;" onclick="logout()">Logout</a>
+        <a id="login-link" href="login.html">Login</a>
+        <a id="signup-link" href="signup.html">Sign Up</a>
+  </div>
+  <div class="nav-right">
+    <button class="nav-btn" onclick="location.href='alerts.html'" title="Alerts">🔔<span class="nav-badge">3</span></button>
+    <button class="nav-btn" onclick="location.href='ai-assistant.html'" title="AI Assistant">🤖</button>
+    
+  </div>
+</nav>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sb-section">
+    <div class="sb-label">Main</div>
+    <a href="index.html" class="sb-link active"><span class="si">🏠</span><span class="sl">Home</span></a>
+    <a href="about.html" class="sb-link"><span class="si">ℹ️</span><span class="sl">About</span></a>
+    <a href="features.html" class="sb-link"><span class="si">⭐</span><span class="sl">Features</span></a>
+    <a href="team.html" class="sb-link"><span class="si">👥</span><span class="sl">Team</span></a>
+    <a href="contact.html" class="sb-link"><span class="si">📬</span><span class="sl">Contact</span></a>
+  </div>
+  <div class="sb-section">
+    <div class="sb-label">Analytics</div>
+    <a href="dashboard.html" class="sb-link"><span class="si">📊</span><span class="sl">Executive Dashboard</span></a>
+    <a href="production.html" class="sb-link"><span class="si">🏭</span><span class="sl">Production Analytics</span></a>
+    <a href="safety.html" class="sb-link"><span class="si">🛡️</span><span class="sl">Safety Dashboard</span></a>
+    <a href="energy.html" class="sb-link"><span class="si">⚡</span><span class="sl">Energy Analytics</span></a>
+    <a href="carbon.html" class="sb-link"><span class="si">🌿</span><span class="sl">Carbon Emissions</span></a>
+  </div>
+  <div class="sb-section">
+    <div class="sb-label">Operations</div>
+    <a href="equipment.html" class="sb-link"><span class="si">⚙️</span><span class="sl">Equipment Monitoring</span></a>
+    <a href="incidents.html" class="sb-link"><span class="si">🚨</span><span class="sl">Incident Management</span><span class="sb-badge">2</span></a>
+    <a href="maintenance.html" class="sb-link"><span class="si">🔧</span><span class="sl">Maintenance Planner</span></a>
+    <a href="alerts.html" class="sb-link"><span class="si">🔔</span><span class="sl">Alert Center</span><span class="sb-badge">3</span></a>
+  </div>
+  <div class="sb-section">
+    <div class="sb-label">AI & ML</div>
+    <a href="predictive.html" class="sb-link"><span class="si">🧠</span><span class="sl">Predictive Maintenance</span></a>
+    <a href="forecasting.html" class="sb-link"><span class="si">📈</span><span class="sl">Production Forecasting</span></a>
+    <a href="ai-insights.html" class="sb-link"><span class="si">💡</span><span class="sl">AI Insights Engine</span></a>
+    <a href="ai-assistant.html" class="sb-link"><span class="si">🤖</span><span class="sl">AI Assistant</span></a>
+    <a href="digital-twin.html" class="sb-link"><span class="si">🏗️</span><span class="sl">Digital Twin</span></a>
+  </div>
+  <div class="sb-section">
+    <div class="sb-label">More</div>
+    <a href="reports.html" class="sb-link"><span class="si">📄</span><span class="sl">Reports Center</span></a>
+    <a href="innovation.html" class="sb-link"><span class="si">🚀</span><span class="sl">Innovation Hub</span></a>
+    <a href="leaderboard.html" class="sb-link"><span class="si">🏆</span><span class="sl">Leaderboard</span></a>
+    <a href="admin.html" class="sb-link"><span class="si">🔐</span><span class="sl">Admin Panel</span></a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main" id="mainArea">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-tags">
+        <span class="hero-tag">🛢 IOCL Guwahati Refinery</span>
+        <span class="hero-tag">Summer Internship 2026</span>
+      </div>
+      <h1 class="hero-title">Refine<span>X</span></h1>
+      <p class="hero-desc">AI-Powered Smart Refinery Intelligence Platform — centralizing monitoring, analytics, predictive intelligence and digital twin visualization for IOCL Guwahati Refinery.</p>
+      <div class="hero-btns">
+        <a href="dashboard.html" class="btn-hero-primary">📊 Open Dashboard</a>
+        <a href="features.html" class="btn-hero-outline">Explore Features</a>
+      </div>
+      <div class="hero-live"><div class="live-dot"></div><span>Live Plant Status: <strong>All Systems Operational</strong></span></div>
+    </div>
+    <div class="hero-visual">
+      <div class="plant-card">
+        <div class="pc-header">⚙ Live Plant Overview</div>
+        <div class="plant-units">
+          <div class="pu g"><div class="pu-n">CDU</div><div class="pu-s">● Operational</div></div>
+          <div class="pu g"><div class="pu-n">FCC</div><div class="pu-s">● Operational</div></div>
+          <div class="pu y"><div class="pu-n">Hydrocracker</div><div class="pu-s">⚠ Maintenance</div></div>
+          <div class="pu g"><div class="pu-n">LPG Unit</div><div class="pu-s">● Operational</div></div>
+          <div class="pu g"><div class="pu-n">Utilities</div><div class="pu-s">● Operational</div></div>
+          <div class="pu g"><div class="pu-n">Tank Farm</div><div class="pu-s">● Operational</div></div>
+        </div>
+        <div class="chart-wrap"><canvas id="heroChart"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- KPIs -->
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kpi-lbl">Total Production Today</div><div class="kpi-val">48,500 <span>MT</span></div><div class="kpi-delta up">▲ 3.2% vs yesterday</div><div class="kpi-ico">🏭</div></div>
+      <div class="kpi s"><div class="kpi-lbl">Plant Efficiency</div><div class="kpi-val">94.6<span>%</span></div><div class="kpi-delta up">▲ 1.1% this week</div><div class="kpi-ico">📈</div></div>
+      <div class="kpi i"><div class="kpi-lbl">Safety Index</div><div class="kpi-val">98.3<span>%</span></div><div class="kpi-delta up">▲ 0.5% this month</div><div class="kpi-ico">🛡️</div></div>
+      <div class="kpi w"><div class="kpi-lbl">Equipment Health</div><div class="kpi-val">87.4<span>%</span></div><div class="kpi-delta dn">▼ 2 assets flagged</div><div class="kpi-ico">⚙️</div></div>
+    </div>
+
+    <!-- AI Insights + Alerts -->
+    <div class="g2">
+      <div class="card">
+        <div class="card-hd">
+          <div><div class="card-title">💡 Latest AI Insights</div><div class="card-sub">Auto-generated by RefineX AI Engine</div></div>
+          <a href="ai-insights.html" class="btn btn-sm btn-outline">View All</a>
+        </div>
+        <div class="ins-list">
+          <div class="ins-item"><div class="ins-ico" style="background:#fff2ec;color:#dd571c">🧠</div><div><div class="ins-title">Pump P101 showing early wear pattern</div><div class="ins-meta">Predictive Maintenance · Confidence 91%</div></div></div>
+          <div class="ins-item"><div class="ins-ico" style="background:#dcfce7;color:#166534">📈</div><div><div class="ins-title">FCC efficiency improved 4.8% this week</div><div class="ins-meta">Production Analytics · 2 hours ago</div></div></div>
+          <div class="ins-item"><div class="ins-ico" style="background:#fef9c3;color:#854d0e">⚡</div><div><div class="ins-title">Energy 7% above target on Unit 3</div><div class="ins-meta">Energy Analytics · Action recommended</div></div></div>
+          <div class="ins-item"><div class="ins-ico" style="background:#dbeafe;color:#1e40af">🌿</div><div><div class="ins-title">CO₂ emissions within ESG target range</div><div class="ins-meta">Carbon Dashboard · Score: 82/100</div></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd">
+          <div><div class="card-title">🚨 Critical Alerts</div><div class="card-sub">3 active alerts require attention</div></div>
+          <a href="alerts.html" class="btn btn-sm btn-outline">Manage</a>
+        </div>
+        <div class="al-item crit"><div class="al-ico">🔴</div><div><div class="al-title">High Vibration — Compressor C201</div><div class="al-meta">Critical · CDU Unit · 14 mins ago</div></div></div>
+        <div class="al-item high"><div class="al-ico">🟡</div><div><div class="al-title">Pressure drop in Pipeline PL-08</div><div class="al-meta">High · FCC Unit · 1 hour ago</div></div></div>
+        <div class="al-item med"><div class="al-ico">🔵</div><div><div class="al-title">PM overdue — Heat Exchanger HE-14</div><div class="al-meta">Medium · Maintenance · 6 hours ago</div></div></div>
+      </div>
+    </div>
+
+    <!-- Feature Highlights -->
+    <div class="sec-title">Platform Features</div>
+    <div class="feat-grid">
+      <a href="predictive.html" class="feat-card"><div class="fc-ico">🧠</div><div class="fc-title">Predictive Maintenance</div><div class="fc-desc">ML models predict equipment failure before breakdown occurs.</div><div class="fc-stars">⭐⭐⭐⭐⭐</div></a>
+      <a href="digital-twin.html" class="feat-card"><div class="fc-ico">🏗️</div><div class="fc-title">3D Digital Twin</div><div class="fc-desc">Interactive virtual representation of the entire refinery.</div><div class="fc-stars">⭐⭐⭐⭐⭐</div></a>
+      <a href="ai-assistant.html" class="feat-card"><div class="fc-ico">🤖</div><div class="fc-title">AI Assistant</div><div class="fc-desc">Natural language queries for production, equipment and safety data.</div><div class="fc-stars">⭐⭐⭐⭐⭐</div></a>
+      <a href="forecasting.html" class="feat-card"><div class="fc-ico">📈</div><div class="fc-title">Production Forecasting</div><div class="fc-desc">Prophet & ARIMA-based daily, weekly, monthly forecasts.</div><div class="fc-stars">⭐⭐⭐⭐⭐</div></a>
+      <a href="dashboard.html" class="feat-card"><div class="fc-ico">📊</div><div class="fc-title">Executive Dashboard</div><div class="fc-desc">All KPIs, production trends and AI summaries in one view.</div><div class="fc-stars">⭐⭐⭐⭐</div></a>
+      <a href="safety.html" class="feat-card"><div class="fc-ico">🛡️</div><div class="fc-title">Safety Analytics</div><div class="fc-desc">Monitor safety KPIs, incident trends and compliance tracking.</div><div class="fc-stars">⭐⭐⭐⭐</div></a>
+      <a href="incidents.html" class="feat-card"><div class="fc-ico">🚨</div><div class="fc-title">Incident Management</div><div class="fc-desc">Register, track and resolve incidents with severity prediction.</div><div class="fc-stars">⭐⭐⭐⭐</div></a>
+      <a href="innovation.html" class="feat-card"><div class="fc-ico">🚀</div><div class="fc-title">Innovation Hub</div><div class="fc-desc">Submit, vote, and collaborate on improvement ideas.</div><div class="fc-stars">⭐⭐⭐</div></a>
+    </div>
+
+    <!-- Quick Nav -->
+    <div class="sec-title">Quick Navigation</div>
+    <div class="g4">
+      <a href="dashboard.html" class="qn-card"><div class="qn-ico">📊</div><div class="qn-lbl">Dashboard</div></a>
+      <a href="equipment.html" class="qn-card"><div class="qn-ico">⚙️</div><div class="qn-lbl">Equipment</div></a>
+      <a href="maintenance.html" class="qn-card"><div class="qn-ico">🔧</div><div class="qn-lbl">Maintenance</div></a>
+      <a href="reports.html" class="qn-card"><div class="qn-ico">📄</div><div class="qn-lbl">Reports</div></a>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="ft-grid">
+      <div>
+        <div class="ft-brand">Refine<span>X</span></div>
+        <p class="ft-desc">AI-Powered Smart Refinery Intelligence Platform for IOCL Guwahati Refinery — Summer Internship 2026. Heritage Institute of Technology, Kolkata · CSE Dept.</p>
+      </div>
+      <div class="ft-col">
+        <h4>Platform</h4>
+        <a href="dashboard.html">Executive Dashboard</a>
+        <a href="production.html">Production Analytics</a>
+        <a href="equipment.html">Equipment Monitoring</a>
+        <a href="safety.html">Safety Dashboard</a>
+        <a href="digital-twin.html">Digital Twin</a>
+      </div>
+      <div class="ft-col">
+        <h4>AI & Tools</h4>
+        <a href="predictive.html">Predictive Maintenance</a>
+        <a href="forecasting.html">Production Forecasting</a>
+        <a href="ai-insights.html">AI Insights</a>
+        <a href="ai-assistant.html">AI Assistant</a>
+        <a href="reports.html">Reports Center</a>
+      </div>
+      <div class="ft-col">
+        <h4>Stay Updated</h4>
+        <div class="sub-box">
+          <p>Get alerts and platform updates via email.</p>
+          <form class="sub-form" id="subForm">
+            <input type="email" class="sub-input" placeholder="Your email address" id="subEmail"/>
+            <button type="submit" class="sub-btn">Subscribe</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="ft-bottom">
+      <span>© 2026 RefineX · Team: Prince Raj, Sneha Agarwal, Ayush Kumar, Abhinandan Kumar Rai · IOCL Guwahati Refinery</span>
+      <div class="ft-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="contact.html">Contact</a></div>
+    </div>
+  </footer>
+
+</main>
+</div><!-- /layout -->
+
+<script>
+// ── Sidebar Toggle ──
+const sidebar = document.getElementById('sidebar');
+const mainArea = document.getElementById('mainArea');
+document.getElementById('sidebarToggle').addEventListener('click', () => {
+  if (window.innerWidth <= 768) { sidebar.classList.toggle('open'); }
+  else { sidebar.classList.toggle('collapsed'); mainArea.classList.toggle('expanded'); }
+});
+document.addEventListener('click', e => {
+  if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !document.getElementById('sidebarToggle').contains(e.target))
+    sidebar.classList.remove('open');
+});
+
+// ── Toast ──
+function toast(msg, type='success') {
+  const c = {success:'#10b981',warning:'#f59e0b',error:'#ef4444'}[type];
+  const t = document.createElement('div');
+  t.style.cssText = `position:fixed;bottom:22px;right:22px;z-index:9999;background:${c};color:#fff;padding:11px 18px;border-radius:10px;font-size:13px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.2);opacity:0;transform:translateY(8px);transition:all .28s ease;max-width:300px`;
+  t.textContent = msg; document.body.appendChild(t);
+  requestAnimationFrame(() => { t.style.opacity='1'; t.style.transform='translateY(0)'; });
+  setTimeout(() => { t.style.opacity='0'; t.style.transform='translateY(8px)'; setTimeout(()=>t.remove(),300); }, 3400);
+}
+
+// ── Subscribe ──
+document.getElementById('subForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const v = document.getElementById('subEmail').value.trim();
+  if (!v || !v.includes('@')) { toast('Please enter a valid email.','warning'); return; }
+  document.getElementById('subEmail').value = '';
+  toast('Subscribed! You will receive platform updates.');
+});
+
+// ── Hero Chart ──
+const ctx = document.getElementById('heroChart').getContext('2d');
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: ['08:00','10:00','12:00','14:00','16:00','18:00'],
+    datasets: [{
+      label: 'Production (MT/hr)', data: [1820,1950,2100,2080,2200,2150],
+      borderColor: '#dd571c', backgroundColor: 'rgba(221,87,28,.15)',
+      pointBackgroundColor: '#dd571c', pointRadius: 4,
+      borderWidth: 2.5, tension: 0.4, fill: true
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { display:false }, ticks: { color:'#94a3b8', font:{ size:10 } } },
+      y: { grid: { color:'rgba(255,255,255,.06)' }, ticks: { color:'#94a3b8', font:{ size:10 } } }
+    }
+  }
+});
+
+// ── Login & Logout ──
+document.addEventListener("DOMContentLoaded", () => {
+      const token = localStorage.getItem("token");
+      document.getElementById("profile-link").style.display = token ? "inline-block" : "none";
+      document.getElementById("logout-link").style.display = token ? "inline-block" : "none";
+      document.getElementById("login-link").style.display = token ? "none" : "inline-block";
+      document.getElementById("signup-link").style.display = token ? "none" : "inline-block";
+    });
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = "login.html";
+    }
+</script>
+</body>
+</html>
