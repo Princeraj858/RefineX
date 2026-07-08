@@ -8,3 +8,5 @@ pandas
 scikit-learn
 matplotlib
 joblib
+reportlab
+prophet
