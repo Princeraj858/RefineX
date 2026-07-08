@@ -270,7 +270,6 @@ footer{background:var(--bg2);color:#8fa0b8;padding:44px 40px 0;margin-top:auto}
   <div class="sb-section">
     <div class="sb-label">Analytics</div>
     <a href="dashboard.html" class="sb-link"><span class="si">📊</span><span class="sl">Executive Dashboard</span></a>
-    <a href="production.html" class="sb-link"><span class="si">🏭</span><span class="sl">Production Analytics</span></a>
     <a href="safety.html" class="sb-link"><span class="si">🛡️</span><span class="sl">Safety Dashboard</span></a>
     <a href="energy.html" class="sb-link"><span class="si">⚡</span><span class="sl">Energy Analytics</span></a>
     <a href="carbon.html" class="sb-link"><span class="si">🌿</span><span class="sl">Carbon Emissions</span></a>
@@ -278,24 +277,16 @@ footer{background:var(--bg2);color:#8fa0b8;padding:44px 40px 0;margin-top:auto}
   <div class="sb-section">
     <div class="sb-label">Operations</div>
     <a href="equipment.html" class="sb-link"><span class="si">⚙️</span><span class="sl">Equipment Monitoring</span></a>
-    <a href="incidents.html" class="sb-link"><span class="si">🚨</span><span class="sl">Incident Management</span><span class="sb-badge">2</span></a>
-    <a href="maintenance.html" class="sb-link"><span class="si">🔧</span><span class="sl">Maintenance Planner</span></a>
+    <a href="incidents.html" class="sb-link"><span class="si">🚨</span><span class="sl">Incident Management</span></a>
+    <a href="../ml/production_forecasting/pf/templates/production_dashboard.html" class="sb-link"><span class="si">📈</span><span class="sl">Production Forecasting</span></a>
+    <a href="../ml/production_forecasting/pf/templates/density_dashboard.html" class="sb-link"><span class="si">⚗️</span><span class="sl">Density Forecasting</span></a>
     <a href="alerts.html" class="sb-link"><span class="si">🔔</span><span class="sl">Alert Center</span><span class="sb-badge">3</span></a>
-  </div>
-  <div class="sb-section">
-    <div class="sb-label">AI & ML</div>
-    <a href="predictive.html" class="sb-link"><span class="si">🧠</span><span class="sl">Predictive Maintenance</span></a>
-    <a href="forecasting.html" class="sb-link"><span class="si">📈</span><span class="sl">Production Forecasting</span></a>
-    <a href="ai-insights.html" class="sb-link"><span class="si">💡</span><span class="sl">AI Insights Engine</span></a>
-    <a href="ai-assistant.html" class="sb-link"><span class="si">🤖</span><span class="sl">AI Assistant</span></a>
-    <a href="digital-twin.html" class="sb-link"><span class="si">🏗️</span><span class="sl">Digital Twin</span></a>
   </div>
   <div class="sb-section">
     <div class="sb-label">More</div>
     <a href="reports.html" class="sb-link"><span class="si">📄</span><span class="sl">Reports Center</span></a>
     <a href="innovation.html" class="sb-link"><span class="si">🚀</span><span class="sl">Innovation Hub</span></a>
-    <a href="leaderboard.html" class="sb-link"><span class="si">🏆</span><span class="sl">Leaderboard</span></a>
-    <a href="admin.html" class="sb-link"><span class="si">🔐</span><span class="sl">Admin Panel</span></a>
+    <a href="profile.html" class="sb-link"><span class="si">🔐</span><span class="sl">Profile</span></a>
   </div>
 </aside>
 
@@ -338,10 +329,14 @@ footer{background:var(--bg2);color:#8fa0b8;padding:44px 40px 0;margin-top:auto}
 
     <!-- KPIs -->
     <div class="kpi-grid">
-      <div class="kpi"><div class="kpi-lbl">Total Production Today</div><div class="kpi-val">48,500 <span>MT</span></div><div class="kpi-delta up">▲ 3.2% vs yesterday</div><div class="kpi-ico">🏭</div></div>
-      <div class="kpi s"><div class="kpi-lbl">Plant Efficiency</div><div class="kpi-val">94.6<span>%</span></div><div class="kpi-delta up">▲ 1.1% this week</div><div class="kpi-ico">📈</div></div>
-      <div class="kpi i"><div class="kpi-lbl">Safety Index</div><div class="kpi-val">98.3<span>%</span></div><div class="kpi-delta up">▲ 0.5% this month</div><div class="kpi-ico">🛡️</div></div>
-      <div class="kpi w"><div class="kpi-lbl">Equipment Health</div><div class="kpi-val">87.4<span>%</span></div><div class="kpi-delta dn">▼ 2 assets flagged</div><div class="kpi-ico">⚙️</div></div>
+      <div class="kpi"><div class="kpi-lbl">Total Production Today</div><div class="kpi-val" id="production-value">-- <span>MT</span></div>
+<div class="kpi-delta up" id="production-change">Loading...</div><div class="kpi-ico">🏭</div></div>
+      <div class="kpi s"><div class="kpi-lbl">Plant Efficiency</div><div class="kpi-val" id="efficiency-value">--<span>%</span></div>
+<div class="kpi-delta up" id="efficiency-change">Loading...</div><div class="kpi-ico">📈</div></div>
+      <div class="kpi i"><div class="kpi-lbl">Safety Index</div><div class="kpi-val" id="safety-value">--<span>%</span></div>
+<div class="kpi-delta up" id="safety-change">Loading...</div><div class="kpi-ico">🛡️</div></div>
+      <div class="kpi w"><div class="kpi-lbl">Equipment Health</div><div class="kpi-val" id="equipment-value">--<span>%</span></div>
+<div class="kpi-delta dn" id="equipment-change">Loading...</div><div class="kpi-ico">⚙️</div></div>
     </div>
 
     <!-- AI Insights + Alerts -->
@@ -372,14 +367,15 @@ footer{background:var(--bg2);color:#8fa0b8;padding:44px 40px 0;margin-top:auto}
     <!-- Feature Highlights -->
     <div class="sec-title">Platform Features</div>
     <div class="feat-grid">
-      <a href="predictive.html" class="feat-card"><div class="fc-ico">🧠</div><div class="fc-title">Predictive Maintenance</div><div class="fc-desc">ML models predict equipment failure before breakdown occurs.</div><div class="fc-stars">⭐⭐⭐⭐⭐</div></a>
-      <a href="digital-twin.html" class="feat-card"><div class="fc-ico">🏗️</div><div class="fc-title">3D Digital Twin</div><div class="fc-desc">Interactive virtual representation of the entire refinery.</div><div class="fc-stars">⭐⭐⭐⭐⭐</div></a>
+      <a href="equipment.html" class="feat-card"><div class="fc-ico">⚙️</div><div class="fc-title">Equipment Monitoring</div><div class="fc-desc">ML models predict equipment failure before breakdown occurs.</div><div class="fc-stars">⭐⭐⭐⭐⭐</div></a>
       <a href="ai-assistant.html" class="feat-card"><div class="fc-ico">🤖</div><div class="fc-title">AI Assistant</div><div class="fc-desc">Natural language queries for production, equipment and safety data.</div><div class="fc-stars">⭐⭐⭐⭐⭐</div></a>
-      <a href="forecasting.html" class="feat-card"><div class="fc-ico">📈</div><div class="fc-title">Production Forecasting</div><div class="fc-desc">Prophet & ARIMA-based daily, weekly, monthly forecasts.</div><div class="fc-stars">⭐⭐⭐⭐⭐</div></a>
+      <a href="../ml/production_forecasting/pf/templates/production_dashboard.html" class="feat-card"><div class="fc-ico">📈</div><div class="fc-title">Production Forecasting</div><div class="fc-desc">Prophet & ARIMA-based daily, weekly, monthly forecasts.</div><div class="fc-stars">⭐⭐⭐⭐⭐</div></a>
       <a href="dashboard.html" class="feat-card"><div class="fc-ico">📊</div><div class="fc-title">Executive Dashboard</div><div class="fc-desc">All KPIs, production trends and AI summaries in one view.</div><div class="fc-stars">⭐⭐⭐⭐</div></a>
       <a href="safety.html" class="feat-card"><div class="fc-ico">🛡️</div><div class="fc-title">Safety Analytics</div><div class="fc-desc">Monitor safety KPIs, incident trends and compliance tracking.</div><div class="fc-stars">⭐⭐⭐⭐</div></a>
       <a href="incidents.html" class="feat-card"><div class="fc-ico">🚨</div><div class="fc-title">Incident Management</div><div class="fc-desc">Register, track and resolve incidents with severity prediction.</div><div class="fc-stars">⭐⭐⭐⭐</div></a>
       <a href="innovation.html" class="feat-card"><div class="fc-ico">🚀</div><div class="fc-title">Innovation Hub</div><div class="fc-desc">Submit, vote, and collaborate on improvement ideas.</div><div class="fc-stars">⭐⭐⭐</div></a>
+      <a href="../ml/production_forecasting/pf/templates/density_dashboard.html" class="feat-card"><div class="fc-ico">⚗️</div><div class="fc-title">Density Forcasting</div><div class="fc-desc">ML models predict equipment failure before breakdown occurs.</div><div class="fc-stars">⭐⭐⭐⭐⭐</div></a>
+
     </div>
 
     <!-- Quick Nav -->
@@ -387,7 +383,7 @@ footer{background:var(--bg2);color:#8fa0b8;padding:44px 40px 0;margin-top:auto}
     <div class="g4">
       <a href="dashboard.html" class="qn-card"><div class="qn-ico">📊</div><div class="qn-lbl">Dashboard</div></a>
       <a href="equipment.html" class="qn-card"><div class="qn-ico">⚙️</div><div class="qn-lbl">Equipment</div></a>
-      <a href="maintenance.html" class="qn-card"><div class="qn-ico">🔧</div><div class="qn-lbl">Maintenance</div></a>
+      <a href="../ml/production_forecasting/pf/templates/production_dashboard.html" class="qn-card"><div class="qn-ico">📈</div><div class="qn-lbl">Forecasting</div></a>
       <a href="reports.html" class="qn-card"><div class="qn-ico">📄</div><div class="qn-lbl">Reports</div></a>
     </div>
 
@@ -406,12 +402,10 @@ footer{background:var(--bg2);color:#8fa0b8;padding:44px 40px 0;margin-top:auto}
         <a href="production.html">Production Analytics</a>
         <a href="equipment.html">Equipment Monitoring</a>
         <a href="safety.html">Safety Dashboard</a>
-        <a href="digital-twin.html">Digital Twin</a>
       </div>
       <div class="ft-col">
         <h4>AI & Tools</h4>
-        <a href="predictive.html">Predictive Maintenance</a>
-        <a href="forecasting.html">Production Forecasting</a>
+        <a href="../ml/production_forecasting/pf/templates/production_dashboard.html">Production Forecasting</a>
         <a href="ai-insights.html">AI Insights</a>
         <a href="ai-assistant.html">AI Assistant</a>
         <a href="reports.html">Reports Center</a>
@@ -429,7 +423,7 @@ footer{background:var(--bg2);color:#8fa0b8;padding:44px 40px 0;margin-top:auto}
     </div>
     <div class="ft-bottom">
       <span>© 2026 RefineX · Team: Prince Raj, Sneha Agarwal, Ayush Kumar, Abhinandan Kumar Rai · IOCL Guwahati Refinery</span>
-      <div class="ft-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="contact.html">Contact</a></div>
+      <div class="ft-links"><a href="privacy.html">Privacy & Terms</a><a href="contact.html">Contact</a></div>
     </div>
   </footer>
 
@@ -504,6 +498,37 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.clear();
       window.location.href = "login.html";
     }
+    async function loadHomeDashboard(){
+
+    const res = await fetch("http://127.0.0.1:5000/api/home-dashboard");
+    const data = await res.json();
+
+    document.getElementById("production-value").innerHTML =
+        `${data.production_today} <span>MT</span>`;
+
+    document.getElementById("production-change").innerHTML =
+        `▲ ${data.production_change}% vs yesterday`;
+
+    document.getElementById("efficiency-value").innerHTML =
+        `${data.plant_efficiency}<span>%</span>`;
+
+    document.getElementById("efficiency-change").innerHTML =
+        `▲ ${data.efficiency_change}% this week`;
+
+    document.getElementById("safety-value").innerHTML =
+        `${data.safety_index}<span>%</span>`;
+
+    document.getElementById("safety-change").innerHTML =
+        `▲ ${data.safety_change}% this month`;
+
+    document.getElementById("equipment-value").innerHTML =
+        `${data.equipment_health}<span>%</span>`;
+
+    document.getElementById("equipment-change").innerHTML =
+        `▼ ${data.flagged_assets} assets flagged`;
+}
+
+loadHomeDashboard();
 </script>
 </body>
 </html>

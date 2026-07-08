@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RefineX – Incident Management | IOCL Guwahati</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+
+    :root{--primary:#dd571c;
+      --primary-dark:#b8440f;
+      --accent-green:#22c55e;
+      --accent-yellow:#f59e0b;
+      --accent-red:#ef4444;
+      --accent-blue:#3b82f6;
+      --surface:#22262e;
+      --border:#2e3340;
+      --text:#e8eaf0;
+      --muted:#8b909e;
+
+      --brand:#dd571c;
+      --brand-dark:#b8430f;
+      --brand-light:#f07040;
+      --brand-faint:#fff2ec;
+      --dark:#1a1a2e;
+      --dark-mid:#16213e;
+      --light:#94a3b8;
+      --white:#ffffff;
+      --success:#10b981;
+      --warning:#f59e0b;
+      --danger:#ef4444;
+      --info:#3b82f6;
+      --sidebar-w:258px;
+      --nav-h:64px;
+      --radius:10px;
+      --radius-lg:16px;
+      --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06);
+      --tr:.22s cubic-bezier(.4,0,.2,1);
+      --bg: #0d0e10;
+      --bg2: #14161a;
+      --bg3: #1c1f25;}
+
+
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);}
+
+
+    /* ===== NAVBAR ===== */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:1000;height:var(--nav-h);background:var(--bg2);display:flex;align-items:center;padding:0 20px;gap:12px;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.nav-toggle{background:none;border:none;cursor:pointer;color:#fff;font-size:20px;padding:6px 8px;border-radius:6px;transition:background var(--tr);flex-shrink:0}
+.nav-toggle:hover{background:rgba(255,255,255,.1)}
+.nav-brand{text-decoration: none;display:flex;align-items:center;gap:10px;font-family:'Rajdhani',sans-serif;font-size:1.45rem;font-weight:700;color:#fff}
+.nav-brand .logo{width:34px;height:34px;background:var(--brand);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px}
+.nav-links{display:flex;align-items:center;gap:2px;margin-left:auto}
+.nav-links a{text-decoration: none;color:#9aaac4;font-size:13px;font-weight:500;padding:6px 11px;border-radius:6px;transition:all var(--tr)}
+.nav-links a:hover,.nav-links a.active{color:#fff;background:rgba(221,87,28,.22)}
+.nav-right{display:flex;align-items:center;gap:8px;margin-left:12px}
+.nav-btn{width:36px;height:36px;border-radius:8px;border:none;background:rgba(255,255,255,.08);color:#ccc;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all var(--tr);position:relative}
+.nav-btn:hover{background:var(--brand);color:#fff}
+.nav-badge{position:absolute;top:-4px;right:-4px;background:var(--brand);color:#fff;font-size:9px;font-weight:700;padding:1px 4px;border-radius:10px;min-width:16px;text-align:center}
+.nav-user{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.07);border-radius:8px;padding:5px 10px;cursor:pointer}
+.nav-avatar{width:28px;height:28px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.nav-uname{color:#ddd;font-size:12px;font-weight:500}
+
+.brand-text{display:flex;flex-direction:column;}
+.brand-name{ font-size:32px;font-weight:700;font-family:'Poppins', sans-serif;line-height:1;}
+.brand-nameX{color:var(--brand)}
+.brand-subtitle{font-size:11px;font-weight:500;font-family:'Montserrat', sans-serif; /* Change this */color:#ddd7d7;letter-spacing:1px;text-transform: uppercase;}
+
+
+/* ===== LAYOUT ===== */
+.layout{display:flex;margin-top:var(--nav-h);flex:1}
+
+/* ===== SIDEBAR ===== */
+.sidebar{width:var(--sidebar-w);background:var(--bg2);position:fixed;top:var(--nav-h);bottom:0;left:0;overflow-y:auto;overflow-x:hidden;transition:width var(--tr);z-index:900;display:flex;flex-direction:column}
+.sidebar.collapsed{width:62px}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:2px}
+.sb-section{padding:6px 0}
+.sb-label{padding:6px 18px;font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#4a5a74;white-space:nowrap;overflow:hidden}
+.sidebar.collapsed .sb-label{opacity:0}
+.sb-link{display:flex;align-items:center;gap:11px;padding:9px 18px;color:#7a90aa;font-size:13px;font-weight:500;border-left:3px solid transparent;transition:all var(--tr);white-space:nowrap;cursor:pointer;text-decoration:none}
+.sb-link .si{font-size:16px;flex-shrink:0;width:20px;text-align:center}
+.sb-link .sl{overflow:hidden;transition:opacity var(--tr)}
+.sidebar.collapsed .sl{opacity:0;width:0}
+.sb-link:hover{color:#fff;background:rgba(221,87,28,.12)}
+.sb-link.active{color:var(--brand-light);border-left-color:var(--brand);background:rgba(221,87,28,.15)}
+.sb-badge{margin-left:auto;background:var(--brand);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;flex-shrink:0}
+.sidebar.collapsed .sb-badge{display:none}
+
+/* ===== MAIN ===== */
+.main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;transition:margin-left var(--tr)}
+.main.expanded{margin-left:62px}
+
+
+
+    .page-header{padding:32px 48px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+    .page-title{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:#fff;}
+    .page-sub{font-size:13px;color:var(--muted);margin-top:2px;}
+    .btn-primary{background:var(--primary);color:#fff;border:none;cursor:pointer;padding:10px 22px;border-radius:8px;font-size:14px;font-weight:600;transition:all .2s;}
+    .btn-primary:hover{background:var(--primary-dark);}
+    .section{padding:32px 48px;}
+    .section-title{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:20px;}
+    .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;}
+    .stat-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:22px;text-align:center;}
+    .stat-box .num{font-family:'Rajdhani',sans-serif;font-size:36px;font-weight:700;}
+    .stat-box .lbl{font-size:12px;color:var(--muted);margin-top:4px;}
+    .stat-box.open .num{color:var(--accent-red);}
+    .stat-box.closed .num{color:var(--accent-green);}
+    .stat-box.resolved .num{color:var(--accent-blue);}
+    .stat-box.total .num{color:var(--primary);}
+    .inc-table-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:24px;}
+    table{width:100%;border-collapse:collapse;}
+    thead{background:var(--surface);}
+    th{padding:12px 16px;text-align:left;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;border-bottom:1px solid var(--border);}
+    td{padding:13px 16px;font-size:13.5px;color:var(--text);border-bottom:1px solid var(--border);}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:rgba(255,255,255,0.02);}
+    .sev-badge,.status-badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;}
+    .sev-badge.critical{background:rgba(239,68,68,0.12);color:var(--accent-red);}
+    .sev-badge.high{background:rgba(245,158,11,0.12);color:var(--accent-yellow);}
+    .sev-badge.medium{background:rgba(59,130,246,0.12);color:var(--accent-blue);}
+    .sev-badge.low{background:rgba(34,197,94,0.12);color:var(--accent-green);}
+    .status-badge.open{background:rgba(239,68,68,0.1);color:var(--accent-red);}
+    .status-badge.resolved{background:rgba(34,197,94,0.1);color:var(--accent-green);}
+    .status-badge.investigating{background:rgba(245,158,11,0.1);color:var(--accent-yellow);}
+    .reg-card{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:28px;}
+    .reg-card h3{font-size:16px;font-weight:700;color:var(--text);margin-bottom:20px;}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+    .form-group{margin-bottom:16px;}
+    .form-group label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:7px;}
+    .form-input,.form-select,.form-textarea{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:11px 14px;border-radius:9px;font-size:14px;outline:none;font-family:'Inter',sans-serif;transition:border-color .2s;}
+    .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--primary);}
+    .form-input::placeholder,.form-textarea::placeholder{color:var(--muted);}
+    .form-textarea{resize:vertical;min-height:100px;}
+    .ai-badge{background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:10px;padding:14px 18px;display:block;margin-top:12px;}
+    .ai-badge h4{font-size:12px;font-weight:700;color:var(--accent-blue);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;}
+    .ai-badge p{font-size:13.5px;color:var(--text);}
+    
+
+    /* ===== FOOTER ===== */
+      footer{background:var(--bg2);color:#8fa0b8;padding:44px 40px 0;margin-top:auto}
+      .ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:36px;padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,.08)}
+      .ft-brand{font-family:'Rajdhani',sans-serif;font-size:1.4rem;font-weight:700;color:#fff;margin-bottom:9px}
+      .ft-brand span{color:var(--brand)}
+      .ft-desc{font-size:13px;line-height:1.7;max-width:270px}
+      .ft-col h4{color:#fff;font-size:12px;font-weight:700;margin-bottom:13px;text-transform:uppercase;letter-spacing:.8px}
+      .ft-col a{text-decoration: none;display:block;font-size:13px;margin-bottom:8px;transition:color var(--tr);color:#8fa0b8}
+      .ft-col a:hover{color:var(--brand-light)}
+      /* Subscribe */
+      .sub-box{display:flex;flex-direction:column;gap:9px}
+      .sub-box p{font-size:12px;color:#8fa0b8}
+      .sub-form{display:flex;gap:7px}
+      .sub-input{flex:1;padding:8px 12px;border-radius:8px;border:1.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;font-size:13px;outline:none;font-family:'Inter',sans-serif}
+      .sub-input::placeholder{color:#6b7a99}
+      .sub-input:focus{border-color:var(--brand)}
+      .sub-btn{padding:8px 16px;background:var(--brand);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:background var(--tr);font-family:'Inter',sans-serif}
+      .sub-btn:hover{background:var(--brand-dark)}
+      .ft-bottom{display:flex;align-items:center;justify-content:space-between;padding:14px 0;font-size:11px;flex-wrap:wrap;gap:8px}
+      .ft-links{display:flex;gap:14px}
+      .ft-links a{text-decoration: none;color:#8fa0b8;transition:color var(--tr)}.ft-links a:hover{color:var(--brand-light)}
+
+      /* ===== RESPONSIVE ===== */
+      @media(max-width:1100px){.feat-grid{grid-template-columns:repeat(2,1fr)}.g4{grid-template-columns:repeat(2,1fr)}}
+      @media(max-width:900px){.hero{flex-direction:column}.hero-visual{width:100%;flex:none}.hero-title{font-size:3rem}}
+      @media(max-width:768px){
+        .sidebar{transform:translateX(-100%);width:258px}.sidebar.open{transform:translateX(0)}
+        .main{margin-left:0!important}.nav-links{display:none}
+        .g2,.g4,.feat-grid{grid-template-columns:1fr}
+        .ft-grid{grid-template-columns:1fr}.content{padding:14px}
+      }
+
+
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <button class="nav-toggle" id="sidebarToggle">☰</button>
+  <a href="index.html" class="nav-brand">
+        <div class="logo">RX</div>
+
+        <div class="brand-text">
+            <span class="brand-name">Refine<span class="brand-nameX">X</span></span>
+            <span class="brand-subtitle">IOCL Guwahati</span>
+        </div>
+    </a>
+  <div class="nav-links">
+    <a href="index.html" >Home</a>
+    <a href="about.html">About</a>
+    <a href="features.html">Features</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="team.html">Team</a>
+    <a href="contact.html">Contact</a>
+    <a id="profile-link" href="profile.html" style="display: none;">Profile</a>
+        <a id="logout-link" href="#" style="display: none;" onclick="logout()">Logout</a>
+        <a id="login-link" href="login.html">Login</a>
+        <a id="signup-link" href="signup.html">Sign Up</a>
+  </div>
+  <div class="nav-right">
+    <button class="nav-btn" onclick="location.href='alerts.html'" title="Alerts">🔔<span class="nav-badge">3</span></button>
+    <button class="nav-btn" onclick="location.href='ai-assistant.html'" title="AI Assistant">🤖</button>
+    
+  </div>
+</nav>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sb-section">
+    <div class="sb-label">Main</div>
+    <a href="index.html" class="sb-link"><span class="si">🏠</span><span class="sl">Home</span></a>
+    <a href="about.html" class="sb-link"><span class="si">ℹ️</span><span class="sl">About</span></a>
+    <a href="features.html" class="sb-link"><span class="si">⭐</span><span class="sl">Features</span></a>
+    <a href="team.html" class="sb-link"><span class="si">👥</span><span class="sl">Team</span></a>
+    <a href="contact.html" class="sb-link"><span class="si">📬</span><span class="sl">Contact</span></a>
+  </div>
+  <div class="sb-section">
+    <div class="sb-label">Analytics</div>
+    <a href="dashboard.html" class="sb-link"><span class="si">📊</span><span class="sl">Executive Dashboard</span></a>
+    <a href="safety.html" class="sb-link"><span class="si">🛡️</span><span class="sl">Safety Dashboard</span></a>
+    <a href="energy.html" class="sb-link"><span class="si">⚡</span><span class="sl">Energy Analytics</span></a>
+    <a href="carbon.html" class="sb-link"><span class="si">🌿</span><span class="sl">Carbon Emissions</span></a>
+  </div>
+  <div class="sb-section">
+    <div class="sb-label">Operations</div>
+    <a href="equipment.html" class="sb-link"><span class="si">⚙️</span><span class="sl">Equipment Monitoring</span></a>
+    <a href="incidents.html" class="sb-link active"><span class="si">🚨</span><span class="sl">Incident Management</span></a>
+ <a href="../ml/production_forecasting/pf/templates/production_dashboard.html" class="sb-link"><span class="si">📈</span><span class="sl">Production Forecasting</span></a>
+    <a href="../ml/production_forecasting/pf/templates/density_dashboard.html" class="sb-link"><span class="si">⚗️</span><span class="sl">Density Forecasting</span></a>
+        <a href="alerts.html" class="sb-link"><span class="si">🔔</span><span class="sl">Alert Center</span><span class="sb-badge">3</span></a>
+  </div>
+  <div class="sb-section">
+    <div class="sb-label">More</div>
+    <a href="reports.html" class="sb-link"><span class="si">📄</span><span class="sl">Reports Center</span></a>
+    <a href="innovation.html" class="sb-link"><span class="si">🚀</span><span class="sl">Innovation Hub</span></a>
+    <a href="profile.html" class="sb-link"><span class="si">🔐</span><span class="sl">Profile</span></a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main" id="mainArea">
+    
+    <div class="page-header">
+      <div><div class="page-title">Incident Management</div><div class="page-sub">Register, track, and resolve refinery incidents with AI severity classification</div></div>
+      <button class="btn-primary" onclick="document.getElementById('reg-section').scrollIntoView({behavior:'smooth'})">+ Register Incident</button>
+    </div>
+
+    <div class="section">
+      <div class="stat-row">
+        <div class="stat-box open"><div class="num" id="openCount">0</div><div class="lbl">Open Incidents</div></div>
+        <div class="stat-box resolved"><div class="num" id="resolvedCount">0</div><div class="lbl">Resolved</div></div>
+        <div class="stat-box resolved" style="--accent-green:#3b82f6;"><div class="num" id="investigatingCount">0</div><div class="lbl">Investigating</div></div>
+        <div class="stat-box total"><div class="num" id="totalCount">0</div><div class="lbl">Total This Year</div></div>
+      </div>
+
+      <div class="section-title">Incident Dashboard</div>
+      <div class="inc-table-wrap">
+        <table>
+          <thead><tr><th>ID</th><th>Title</th><th>Department</th><th>Severity</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="incidentTable"></tbody>  
+        </table>
+        <div
+id="paginationBar"
+style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 20px;
+background:#1c1f25;
+border-top:1px solid #2e3340;
+">
+
+<div id="pageInfo">
+
+Showing 0-0 of 0 incidents
+
+</div>
+
+<div style="display:flex;gap:10px;">
+
+<button
+class="btn-primary"
+onclick="previousPage()">
+
+← Previous
+
+</button>
+
+<button
+class="btn-primary"
+onclick="nextPage()">
+
+Next →
+
+</button>
+
+</div>
+
+</div>
+      </div>
+    </div>
+      <div
+id="incidentModal"
+style="display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.6);
+z-index:9999;">
+
+<div
+style="
+background:#1c1f25;
+width:700px;
+max-width:90%;
+margin:60px auto;
+padding:25px;
+border-radius:12px;">
+
+<h2>Incident Details</h2>
+
+<div
+id="incidentDetails"
+style="
+line-height:2;
+max-height:400px;
+overflow:auto;
+margin-top:15px;
+">
+</div>
+
+<div
+style="margin-top:20px;display:flex;gap:10px;">
+
+<button
+class="btn-primary"
+onclick="changeStatus('Investigating')">
+
+🟡 Investigating
+
+</button>
+
+<button
+class="btn-primary"
+onclick="changeStatus('Resolved')">
+
+🟢 Resolve
+
+</button>
+
+<button
+class="btn-primary"
+onclick="closeModal()">
+
+Close
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+    <!-- Register -->
+    <div class="section" style="padding-top:0;" id="reg-section">
+      <div class="section-title">Register New Incident</div>
+      <div class="reg-card">
+        <h3>🚨 Incident Registration Form</h3>
+        <div class="form-row">
+          <div class="form-group" style="margin-bottom:0;"><label>Incident Title</label><input class="form-input" placeholder="Brief description of the incident" id="inc-title" ></div>
+          <div class="form-group" style="margin-bottom:0;"><label>Department</label>
+            <select class="form-select">
+              <option>Select department</option><option>Process</option><option>Operations</option>
+              <option>Maintenance</option><option>Safety</option><option>IT</option><option>Utilities</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row" style="margin-top:16px;">
+          <div class="form-group" style="margin-bottom:0;"><label>Location / Unit</label>
+            <select class="form-select">
+              <option>Select unit</option><option>CDU</option><option>FCC</option>
+              <option>Hydrocracker</option><option>LPG Unit</option><option>Utilities</option><option>Tank Farm</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:0;"><label>Date & Time</label><input type="datetime-local" class="form-input" id="inc-date"/></div>
+        </div>
+        <div class="form-group" style="margin-top:16px;"><label>Description</label><textarea class="form-textarea" placeholder="Describe what happened, conditions, people involved..." id="inc-desc" ></textarea></div>
+        <div class="ai-badge" id="ai-classify">
+          <h4>🤖 AI Severity Prediction</h4>
+<p id="ai-result">
+Waiting for incident description...
+</p>        </div>
+        <div style="display:flex;gap:12px;margin-top:16px;">
+          <button class="btn-primary" onclick="submitIncident()">Submit Incident</button>
+<button
+id="predictBtn"
+class="btn-primary"
+onclick="aiClassify()">
+
+🤖 Run AI Classification
+
+</button>        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+  <footer>
+    <div class="ft-grid">
+      <div>
+        <div class="ft-brand">Refine<span>X</span></div>
+        <p class="ft-desc">AI-Powered Smart Refinery Intelligence Platform for IOCL Guwahati Refinery — Summer Internship 2026. Heritage Institute of Technology, Kolkata · CSE Dept.</p>
+      </div>
+      <div class="ft-col">
+        <h4>Platform</h4>
+        <a href="dashboard.html">Executive Dashboard</a>
+        <a href="production.html">Production Analytics</a>
+        <a href="equipment.html">Equipment Monitoring</a>
+        <a href="safety.html">Safety Dashboard</a>
+      </div>
+      <div class="ft-col">
+        <h4>AI & Tools</h4>
+        <a href="../ml/production_forecasting/pf/templates/production_dashboard.html">Production Forecasting</a>
+        <a href="ai-insights.html">AI Insights</a>
+        <a href="ai-assistant.html">AI Assistant</a>
+        <a href="reports.html">Reports Center</a>
+      </div>
+      <div class="ft-col">
+        <h4>Stay Updated</h4>
+        <div class="sub-box">
+          <p>Get alerts and platform updates via email.</p>
+          <form class="sub-form" id="subForm">
+            <input type="email" class="sub-input" placeholder="Your email address" id="subEmail"/>
+            <button type="submit" class="sub-btn">Subscribe</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="ft-bottom">
+      <span>© 2026 RefineX · Team: Prince Raj, Sneha Agarwal, Ayush Kumar, Abhinandan Kumar Rai · IOCL Guwahati Refinery</span>
+      <div class="ft-links"><a href="privacy.html">Privacy & Terms</a><a href="contact.html">Contact</a></div>
+    </div>
+  </footer>
+
+</main>
+</div><!-- /layout -->
+
+<script>
+document.getElementById('inc-date').value=new Date().toISOString().slice(0,16);
+let classifyTimer;
+let currentIncident = null;
+let currentPage = 1;
+const pageSize = 6;
+function aiClassify(){
+
+    clearTimeout(classifyTimer);
+
+    const title = document.getElementById("inc-title").value;
+    const desc  = document.getElementById("inc-desc").value;
+
+    if(title.trim().length < 3 && desc.trim().length < 3){
+
+    document.getElementById("ai-result").innerHTML =
+        "Waiting for incident description...";
+
+    return;
+}
+    classifyTimer = setTimeout(async ()=>{
+
+        const badge = document.getElementById("ai-classify");
+        const result = document.getElementById("ai-result");
+        const btn = document.getElementById("predictBtn");
+
+btn.disabled = true;
+
+btn.innerHTML = "⏳ Analyzing...";
+        badge.style.display = "block";
+
+result.innerHTML = `
+<span style="color:#3b82f6">
+⏳ AI is analyzing the incident...
+</span>
+`;
+        try{
+
+            const response = await fetch("http://127.0.0.1:5000/predict_incident",{
+
+                method:"POST",
+
+                headers:{
+                    "Content-Type":"application/json"
+                },
+
+                body: JSON.stringify({
+
+    incident: `${title}\n${desc}`
+
+})
+
+            });
+
+            const data = await response.json();
+
+            if(data.success){
+                lastPrediction = data;
+
+
+                const colors = {
+    Minor: "#22c55e",
+    Moderate: "#3b82f6",
+    Major: "#f59e0b",
+    Serious: "#f59e0b",
+    Critical: "#ef4444",
+    Fatal: "#991b1b",
+    Catastrophic: "#7f1d1d"
+};
+
+const color = colors[data.severity] || "#22c55e";
+                result.innerHTML = `
+<div style="line-height:1.8">
+
+<div>
+<b>Severity</b><br>
+<span style="font-size:18px;font-weight:700;color:${color}">
+${data.severity}
+</span>
+</div>
+
+<hr style="margin:10px 0;border-color:#333">
+
+<div>
+<b>Model</b><br>
+${data.model}
+</div>
+
+</div>
+`;
+btn.disabled = false;
+btn.innerHTML = "🤖 Run AI Classification";
+            }
+
+            else{
+
+                result.innerHTML = data.message;
+btn.disabled = false;
+btn.innerHTML = "🤖 Run AI Classification";
+            }
+
+        }
+
+        catch(error){
+
+    result.innerHTML = `
+<span style="color:#ef4444;">
+❌ Unable to connect to the AI prediction service.
+</span>
+`;
+
+    btn.disabled = false;
+    btn.innerHTML = "🤖 Run AI Classification";
+
+    console.error(error);
+
+}
+
+    },500);
+
+}
+let lastPrediction = null;
+
+async function submitIncident(){
+
+    if(!lastPrediction){
+
+        alert("Run AI Classification first.");
+
+        return;
+
+    }
+
+    const body={
+
+        title:document.getElementById("inc-title").value,
+
+        department:document.querySelectorAll(".form-select")[0].value,
+
+        location:document.querySelectorAll(".form-select")[1].value,
+
+        description:document.getElementById("inc-desc").value,
+
+        severity:lastPrediction.severity,
+
+        model:lastPrediction.model
+
+    };
+
+    const response=await fetch("http://127.0.0.1:5000/submit_incident",{
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify(body)
+
+    });
+
+    const data=await response.json();
+
+    if(data.success){
+        alert(
+
+`Incident Registered Successfully
+
+ID : ${data.incident_id}`
+
+        );
+
+       document.getElementById("inc-title").value="";
+document.getElementById("inc-desc").value="";
+
+document.querySelectorAll(".form-select")[0].selectedIndex=0;
+document.querySelectorAll(".form-select")[1].selectedIndex=0;
+
+lastPrediction=null;
+
+document.getElementById("ai-result").innerHTML =
+"Waiting for incident description...";
+
+loadStats();
+
+loadRecentIncidents();
+
+    }
+
+    else{
+
+        alert(data.message);
+
+    }
+
+}
+window.onload=()=>{
+
+    loadStats();
+
+    loadRecentIncidents();
+
+}
+async function loadStats(){
+
+    const res = await fetch(
+        "http://127.0.0.1:5000/incident_stats"
+    );
+
+    const data = await res.json();
+
+    document.getElementById("openCount").textContent =
+        data.open;
+
+    document.getElementById("resolvedCount").textContent =
+        data.resolved;
+
+    document.getElementById("investigatingCount").textContent =
+        data.investigating;
+
+    document.getElementById("totalCount").textContent =
+        data.total;
+
+}
+async function loadRecentIncidents(){
+
+    try{
+
+        const res = await fetch(
+    `http://127.0.0.1:5000/recent_incidents?page=${currentPage}`
+);
+
+const data = await res.json();
+totalIncidents = data.total;
+const incidents = data.incidents;
+        const table = document.getElementById("incidentTable");
+
+        table.innerHTML = "";
+
+        incidents.forEach(item=>{
+
+            let severityClass="low";
+
+            if(item.severity==="Critical")
+                severityClass="critical";
+
+            else if(item.severity==="Major")
+                severityClass="high";
+
+            else if(item.severity==="Moderate")
+                severityClass="medium";
+
+            else if(item.severity==="Minor")
+                severityClass="low";
+
+            let statusClass=item.status.toLowerCase();
+
+            table.innerHTML += `
+
+            <tr>
+
+                <td>${item.id}</td>
+
+                <td>${item.title}</td>
+
+                <td>${item.department}</td>
+
+                <td>
+
+                    <span class="sev-badge ${severityClass}">
+                        ${item.severity}
+                    </span>
+
+                </td>
+
+                <td>${item.date}</td>
+
+               <td>
+
+<span class="status-badge ${statusClass}">
+${item.status}
+</span>
+
+</td>
+
+<td>
+
+<button
+class="btn-primary"
+style="padding:6px 12px;font-size:12px"
+onclick="viewIncident('${item.id}')">
+
+🔍 View
+
+</button>
+
+</td>
+
+</tr>
+            `;
+
+        });
+        const pageInfo = document.getElementById("pageInfo");
+
+if (data.total === 0) {
+
+    pageInfo.innerHTML = `
+        <span style="color:#8b909e;">
+            No incidents found.
+        </span>
+    `;
+
+} else {
+
+    const start = (data.page - 1) * data.limit + 1;
+
+    const end = Math.min(
+        data.page * data.limit,
+        data.total
+    );
+
+    pageInfo.innerHTML = `
+        Showing <strong>${start}</strong>–<strong>${end}</strong>
+        of <strong>${data.total}</strong> incidents
+    `;
+
+}
+
+    }
+
+    catch(err){
+
+        console.error(err);
+
+    }
+
+
+
+}
+
+
+   let totalIncidents = 0;
+
+function nextPage(){
+
+    if(currentPage * pageSize >= totalIncidents)
+        return;
+
+    currentPage++;
+
+    loadRecentIncidents();
+
+}
+function previousPage(){
+
+    if(currentPage>1){
+
+        currentPage--;
+
+        loadRecentIncidents();
+
+    }
+
+}
+async function viewIncident(id){
+
+    currentIncident = id;
+
+    const res = await fetch(
+        `http://127.0.0.1:5000/incident/${id}`
+    );
+
+    const data = await res.json();
+
+    if(!data.success){
+
+        alert(data.message);
+
+        return;
+
+    }
+
+    const i = data.incident;
+
+    document.getElementById("incidentDetails").innerHTML = `
+
+        <p><b>Incident ID:</b> ${i.incident_id}</p>
+
+        <p><b>Title:</b> ${i.title}</p>
+
+        <p><b>Department:</b> ${i.department}</p>
+
+        <p><b>Location:</b> ${i.location}</p>
+
+        <p><b>Severity:</b> ${i.severity}</p>
+
+        <p><b>Status:</b> ${i.status}</p>
+
+        <p><b>Model:</b> ${i.model}</p>
+
+        <p><b>Date:</b> ${i.created_at}</p>
+
+        <hr>
+
+        <b>Description</b>
+
+        <p style="margin-top:10px">
+
+            ${i.description}
+
+        </p>
+
+    `;
+
+    document.getElementById("incidentModal").style.display="block";
+
+}
+async function changeStatus(status){
+
+    if(!currentIncident) return;
+
+    const res = await fetch(
+
+        "http://127.0.0.1:5000/update_incident_status",
+
+        {
+
+            method:"PUT",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({
+
+                incident_id:currentIncident,
+
+                status:status
+
+            })
+
+        }
+
+    );
+
+    const data = await res.json();
+
+    if(data.success){
+
+        closeModal();
+
+        loadStats();
+
+        loadRecentIncidents();
+
+    }
+
+    else{
+
+        alert("Unable to update status.");
+
+    }
+
+}
+function closeModal(){
+
+    currentIncident = null;
+
+    document.getElementById("incidentModal").style.display="none";
+
+}
+window.onclick=function(event){
+
+    const modal=document.getElementById("incidentModal");
+
+    if(event.target===modal){
+
+        closeModal();
+
+    }
+
+}
+</script>
+<script>
+// ── Sidebar Toggle ──
+const sidebar = document.getElementById('sidebar');
+const mainArea = document.getElementById('mainArea');
+document.getElementById('sidebarToggle').addEventListener('click', () => {
+  if (window.innerWidth <= 768) { sidebar.classList.toggle('open'); }
+  else { sidebar.classList.toggle('collapsed'); mainArea.classList.toggle('expanded'); }
+});
+document.addEventListener('click', e => {
+  if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !document.getElementById('sidebarToggle').contains(e.target))
+    sidebar.classList.remove('open');
+});
+
+// ── Login & Logout ──
+document.addEventListener("DOMContentLoaded", () => {
+      const token = localStorage.getItem("token");
+      document.getElementById("profile-link").style.display = token ? "inline-block" : "none";
+      document.getElementById("logout-link").style.display = token ? "inline-block" : "none";
+      document.getElementById("login-link").style.display = token ? "none" : "inline-block";
+      document.getElementById("signup-link").style.display = token ? "none" : "inline-block";
+    });
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = "login.html";
+    }
+</script>
+
+</body>
+</html>

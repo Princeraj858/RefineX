@@ -36,7 +36,6 @@
   --bg3: #1c1f25;
 }
 
-
 *{
     margin:0;
     padding:0;
@@ -46,10 +45,7 @@
 
 body{
     background:#eef2f7;
- 
 }
-
-
 
 /* ================= NAVBAR ================= */
 .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;height:var(--nav-h);background:var(--bg2);display:flex;align-items:center;padding:0 20px;gap:12px;box-shadow:0 2px 12px rgba(0,0,0,.3)}
@@ -106,68 +102,355 @@ body{
 
 
 /* ===== CONTAINER ===== */
-.container{ width:700px; margin:auto; background:white; padding:30px; border-radius:10px;
-    box-shadow:0 5px 15px rgba(0,0,0,0.15);}
-
-h1{ text-align:center; margin-bottom:25px;}
-form{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
-.full{grid-column:1/3;}
-
-label{display:block;margin-bottom:6px;font-weight:bold;}
-
-input,
-select{ width:100%; padding:10px; font-size:15px;}
-
-button{width:100%;padding:12px;background:#0066ff;color:white;border:none;
-    border-radius:5px;cursor:pointer;font-size:16px;}
-
-button:hover{background:#0052cc;}
-
-#preview{width:250px;display:none;margin-top:15px;border-radius:8px;}
-
-#result{margin-top:30px;border:1px solid #ddd;border-radius:8px;padding:20px;background:#fafafa;}
-
-.result-row{margin-bottom:10px;}
-
-.good{color:green;font-weight:bold;}
-
-.bad{color:red;font-weight:bold;}
-#suggestions{position:absolute;width:100%;background:white;border:1px solid #ccc;
-        max-height:250px;overflow-y:auto;z-index:1000;}
-.suggestion{padding:10px;cursor:pointer;border-bottom:1px solid #eee;}
-.suggestion:hover{background:#f3f7ff;}
-
-.report-card{margin-top:40px;background:white;border-radius:15px;box-shadow:0 10px 25px rgba(0,0,0,.12);overflow:hidden;}
-.report-header{background:#0d47a1;color:white;padding:20px;display:flex;
-        justify-content:space-between;align-items:center;}
-.report-section{padding:25px;border-bottom:1px solid #eee;}
-
-.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-top:15px;}
-.status-badge{display:inline-block;padding:12px 25px;border-radius:40px;font-size:20px;font-weight:bold;margin:15px 0;}
-
-.progress{height:18px;background:#ddd;border-radius:20px;overflow:hidden;margin:8px 0;}
-.progress-fill{height:100%;width:0%;background:#2e7d32;transition:.5s;}
-
-.danger-fill{background:#d32f2f;}
-.progress-box{margin:20px 0;}
-.goodBadge{background:#d4edda;color:#155724;}
-
-.warningBadge{background:#fff3cd;color:#856404;}
-.criticalBadge{background:#ffe5b4;color:#a14d00;}
-.failureBadge{background:#f8d7da;color:#721c24;}
-.info-grid div{background:#f8f9fa;padding:15px;border-radius:10px;transition:.3s;}
-.info-grid div:hover{transform:translateY(-3px);box-shadow:0 6px 12px rgba(0,0,0,.08);}
-
-.report-section h3{margin-bottom:15px;color:#0d47a1;border-left:5px solid #0d47a1;padding-left:10px;}
-.report-card{animation:fadeIn .5s ease;}
-.report-image{width:300px;border-radius:10px;border:3px solid #ddd;display:none;}
-
-@keyframes fadeIn{
-from{opacity:0;transform:translateY(15px);}
-to{opacity:1;transform:translateY(0);}
+.container{
+    width:700px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.15);
 }
 
- /* ===== FOOTER ===== */
+h1{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+form{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.full{
+    grid-column:1/3;
+}
+
+label{
+    display:block;
+    margin-bottom:6px;
+    font-weight:bold;
+}
+
+input,
+select{
+    width:100%;
+    padding:10px;
+    font-size:15px;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    background:#0066ff;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+button:hover{
+    background:#0052cc;
+}
+.section-title{
+margin-top:25px;
+margin-bottom:12px;
+font-size:18px;
+font-weight:600;
+color:#0d6efd;
+}
+
+.grid-2{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+}
+
+.grid-4{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px;
+}
+
+@media(max-width:900px){
+
+.grid-4{
+grid-template-columns:repeat(2,1fr);
+}
+
+.grid-2{
+grid-template-columns:1fr;
+}
+
+}
+#preview{
+    width:250px;
+    display:none;
+    margin-top:15px;
+    border-radius:8px;
+}
+
+#result{
+    margin-top:30px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    padding:20px;
+    background:#fafafa;
+}
+
+.result-row{
+    margin-bottom:10px;
+}
+
+.good{
+    color:green;
+    font-weight:bold;
+}
+
+.bad{
+    color:red;
+    font-weight:bold;
+}
+#suggestions{
+
+position:absolute;
+
+width:100%;
+
+background:white;
+
+border:1px solid #ccc;
+
+max-height:250px;
+
+overflow-y:auto;
+
+z-index:1000;
+
+}
+
+.suggestion{
+
+padding:10px;
+
+cursor:pointer;
+
+border-bottom:1px solid #eee;
+
+}
+
+.suggestion:hover{
+
+background:#f3f7ff;
+
+}
+.report-card{
+
+margin-top:40px;
+
+background:white;
+
+border-radius:15px;
+
+box-shadow:0 10px 25px rgba(0,0,0,.12);
+
+overflow:hidden;
+
+}
+
+.report-header{
+
+background:#0d47a1;
+
+color:white;
+
+padding:20px;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+}
+
+.report-section{
+
+padding:25px;
+
+border-bottom:1px solid #eee;
+
+}
+
+.info-grid{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+gap:20px;
+
+margin-top:15px;
+
+}
+
+.status-badge{
+
+display:inline-block;
+
+padding:12px 25px;
+
+border-radius:40px;
+
+font-size:20px;
+
+font-weight:bold;
+
+margin:15px 0;
+
+}
+
+.progress{
+
+height:18px;
+
+background:#ddd;
+
+border-radius:20px;
+
+overflow:hidden;
+
+margin:8px 0;
+
+}
+
+.progress-fill{
+
+height:100%;
+
+width:0%;
+
+background:#2e7d32;
+
+transition:.5s;
+
+}
+
+.danger-fill{
+
+background:#d32f2f;
+
+}
+
+.progress-box{
+
+margin:20px 0;
+
+}
+
+.report-image{
+
+width:300px;
+
+border-radius:10px;
+
+border:3px solid #ddd;
+
+display:none;
+
+}
+
+.goodBadge{
+
+background:#d4edda;
+
+color:#155724;
+
+}
+
+.warningBadge{
+
+background:#fff3cd;
+
+color:#856404;
+
+}
+
+.criticalBadge{
+
+background:#ffe5b4;
+
+color:#a14d00;
+
+}
+
+.failureBadge{
+
+background:#f8d7da;
+
+color:#721c24;
+
+}
+.info-grid div{
+
+background:#f8f9fa;
+
+padding:15px;
+
+border-radius:10px;
+
+transition:.3s;
+
+}
+
+.info-grid div:hover{
+
+transform:translateY(-3px);
+
+box-shadow:0 6px 12px rgba(0,0,0,.08);
+
+}
+
+.report-section h3{
+
+margin-bottom:15px;
+
+color:#0d47a1;
+
+border-left:5px solid #0d47a1;
+
+padding-left:10px;
+
+}
+
+.report-card{
+
+animation:fadeIn .5s ease;
+
+}
+
+@keyframes fadeIn{
+
+from{
+
+opacity:0;
+
+transform:translateY(15px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+}
+
+/* ===== FOOTER ===== */
     footer{background:var(--bg2);color:#8fa0b8;padding:44px 40px 0;margin-top:auto;width: 100%;margin-top: 100px;}
     .ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:36px;padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,.08)}
     .ft-brand{font-family:'Rajdhani',sans-serif;font-size:1.4rem;font-weight:700;color:#fff;margin-bottom:9px}
@@ -209,7 +492,7 @@ to{opacity:1;transform:translateY(0);}
 
 <body>
 
-    <!-- NAVBAR -->
+        <!-- NAVBAR -->
 <nav class="navbar">
   <button class="nav-toggle" id="sidebarToggle">☰</button>
   <a href="index.html" class="nav-brand">
@@ -246,7 +529,7 @@ to{opacity:1;transform:translateY(0);}
 <aside class="sidebar" id="sidebar">
   <div class="sb-section">
     <div class="sb-label">Main</div>
-    <a href="index.html" class="sb-link "><span class="si">🏠</span><span class="sl">Home</span></a>
+    <a href="index.html" class="sb-link"><span class="si">🏠</span><span class="sl">Home</span></a>
     <a href="about.html" class="sb-link"><span class="si">ℹ️</span><span class="sl">About</span></a>
     <a href="features.html" class="sb-link"><span class="si">⭐</span><span class="sl">Features</span></a>
     <a href="team.html" class="sb-link"><span class="si">👥</span><span class="sl">Team</span></a>
@@ -255,7 +538,6 @@ to{opacity:1;transform:translateY(0);}
   <div class="sb-section">
     <div class="sb-label">Analytics</div>
     <a href="dashboard.html" class="sb-link"><span class="si">📊</span><span class="sl">Executive Dashboard</span></a>
-    <a href="production.html" class="sb-link"><span class="si">🏭</span><span class="sl">Production Analytics</span></a>
     <a href="safety.html" class="sb-link"><span class="si">🛡️</span><span class="sl">Safety Dashboard</span></a>
     <a href="energy.html" class="sb-link"><span class="si">⚡</span><span class="sl">Energy Analytics</span></a>
     <a href="carbon.html" class="sb-link"><span class="si">🌿</span><span class="sl">Carbon Emissions</span></a>
@@ -263,30 +545,21 @@ to{opacity:1;transform:translateY(0);}
   <div class="sb-section">
     <div class="sb-label">Operations</div>
     <a href="equipment.html" class="sb-link active"><span class="si">⚙️</span><span class="sl">Equipment Monitoring</span></a>
-    <a href="incidents.html" class="sb-link"><span class="si">🚨</span><span class="sl">Incident Management</span><span class="sb-badge">2</span></a>
-    <a href="maintenance.html" class="sb-link"><span class="si">🔧</span><span class="sl">Maintenance Planner</span></a>
-    <a href="alerts.html" class="sb-link"><span class="si">🔔</span><span class="sl">Alert Center</span><span class="sb-badge">3</span></a>
-  </div>
-  <div class="sb-section">
-    <div class="sb-label">AI & ML</div>
-    <a href="predictive.html" class="sb-link"><span class="si">🧠</span><span class="sl">Predictive Maintenance</span></a>
-    <a href="forecasting.html" class="sb-link"><span class="si">📈</span><span class="sl">Production Forecasting</span></a>
-    <a href="ai-insights.html" class="sb-link"><span class="si">💡</span><span class="sl">AI Insights Engine</span></a>
-    <a href="ai-assistant.html" class="sb-link"><span class="si">🤖</span><span class="sl">AI Assistant</span></a>
-    <a href="digital-twin.html" class="sb-link"><span class="si">🏗️</span><span class="sl">Digital Twin</span></a>
+    <a href="incidents.html" class="sb-link"><span class="si">🚨</span><span class="sl">Incident Management</span></a>
+ <a href="../ml/production_forecasting/pf/templates/production_dashboard.html" class="sb-link"><span class="si">📈</span><span class="sl">Production Forecasting</span></a>
+    <a href="../ml/production_forecasting/pf/templates/density_dashboard.html" class="sb-link"><span class="si">⚗️</span><span class="sl">Density Forecasting</span></a>
+        <a href="alerts.html" class="sb-link"><span class="si">🔔</span><span class="sl">Alert Center</span><span class="sb-badge">3</span></a>
   </div>
   <div class="sb-section">
     <div class="sb-label">More</div>
     <a href="reports.html" class="sb-link"><span class="si">📄</span><span class="sl">Reports Center</span></a>
     <a href="innovation.html" class="sb-link"><span class="si">🚀</span><span class="sl">Innovation Hub</span></a>
-    <a href="leaderboard.html" class="sb-link"><span class="si">🏆</span><span class="sl">Leaderboard</span></a>
-    <a href="admin.html" class="sb-link"><span class="si">🔐</span><span class="sl">Admin Panel</span></a>
+    <a href="profile.html" class="sb-link"><span class="si">🔐</span><span class="sl">Profile</span></a>
   </div>
 </aside>
 
 <!-- MAIN -->
 <main class="main" id="mainArea">
-
 <div class="container">
 
 <h1>Predictive Maintenance Testing</h1>
@@ -453,37 +726,139 @@ to{opacity:1;transform:translateY(0);}
         placeholder="Auto-filled">
         
         </div>
-<div>
+        <div id="genericForm">
 
-<label>Temperature (°C)</label>
-<input type="number" id="temperature" name="temperature" step="0.1" required>
-<small id="temperatureStatus"></small>
+            <div>
+                <label>Temperature (°C)</label>
+                <input type="number" id="temperature" name="temperature" step="0.1" required>
+                <small id="temperatureStatus"></small>
+            </div>
+        
+            <div>
+                <label>Pressure (bar)</label>
+                <input type="number" id="pressure" name="pressure" step="0.1" required>
+                <small id="pressureStatus"></small>
+            </div>
+        
+            <div>
+                <label>Vibration (mm/s)</label>
+                <input type="number" id="vibration" name="vibration" step="0.01" required>
+                <small id="vibrationStatus"></small>
+            </div>
+        
+            <div>
+                <label>Operating Hours</label>
+                <input
+                    type="number"
+                    name="hours"
+                    required>
+            </div>
+        
+        </div>
+        <div id="pumpForm" style="display:none;">
+            <h3 class="section-title">Pump Process Parameters</h3>
+
+            <div class="grid-2">
+            
+            <div>
+            <label>Discharge Pressure (bar)</label>
+            <input type="number" name="discharge_pressure" step="0.01">
+            </div>
+            
+            <div>
+            <label>Discharge Flow</label>
+            <input type="number" name="discharge_flow" step="0.01">
+            </div>
+            
+            <div>
+            <label>Suction Temperature</label>
+            <input type="number" name="suction_temperature" step="0.01">
+            </div>
+            
+            <div>
+            <label>Suction Pressure</label>
+            <input type="number" name="suction_pressure" step="0.01">
+            </div>
+            
+            </div>
+            <h3 class="section-title">Heater Pass Flow</h3>
+
+<div class="grid-2">
+
+<div>
+<label>Heater Pass 1</label>
+<input type="number" name="heater_pass1" step="0.01">
 </div>
 
 <div>
-
-<label>Pressure (bar)</label>
-<input type="number" id="pressure" name="pressure" step="0.1" required>
-<small id="pressureStatus"></small>
+<label>Heater Pass 2</label>
+<input type="number" name="heater_pass2" step="0.01">
 </div>
 
 <div>
-
-<label>Vibration (mm/s)</label>
-<input type="number" id="vibration" name="vibration" step="0.01" required>
-<small id="vibrationStatus"></small>
+<label>Heater Pass 3</label>
+<input type="number" name="heater_pass3" step="0.01">
 </div>
 
 <div>
-
-<label>Operating Hours</label>
-
-<input
-type="number"
-name="hours"
-required>
+<label>Heater Pass 4</label>
+<input type="number" name="heater_pass4" step="0.01">
+</div>
 
 </div>
+<h3 class="section-title">Motor NDE</h3>
+
+<div class="grid-4">
+
+<div><label>H</label><input type="number" name="motor_nde_h" step="0.01"></div>
+
+<div><label>PV</label><input type="number" name="motor_nde_pv" step="0.01"></div>
+
+<div><label>V</label><input type="number" name="motor_nde_v" step="0.01"></div>
+
+<div><label>A</label><input type="number" name="motor_nde_a" step="0.01"></div>
+
+</div>
+<h3 class="section-title">Motor DE</h3>
+
+<div class="grid-4">
+
+<div><label>H</label><input type="number" name="motor_de_h" step="0.01"></div>
+
+<div><label>PV</label><input type="number" name="motor_de_pv" step="0.01"></div>
+
+<div><label>V</label><input type="number" name="motor_de_v" step="0.01"></div>
+
+<div><label>A</label><input type="number" name="motor_de_a" step="0.01"></div>
+
+</div>
+<h3 class="section-title">Pump DE</h3>
+
+<div class="grid-4">
+
+<div><label>H</label><input type="number" name="pump_de_h" step="0.01"></div>
+
+<div><label>PV</label><input type="number" name="pump_de_pv" step="0.01"></div>
+
+<div><label>V</label><input type="number" name="pump_de_v" step="0.01"></div>
+
+<div><label>A</label><input type="number" name="pump_de_a" step="0.01"></div>
+
+</div>
+<h3 class="section-title">Pump NDE</h3>
+
+<div class="grid-4">
+
+<div><label>H</label><input type="number" name="pump_nde_h" step="0.01"></div>
+
+<div><label>PV</label><input type="number" name="pump_nde_pv" step="0.01"></div>
+
+<div><label>V</label><input type="number" name="pump_nde_v" step="0.01"></div>
+
+<div><label>A</label><input type="number" name="pump_nde_a" step="0.01"></div>
+
+</div>
+        </div>
 
 <div class="full">
 
@@ -512,7 +887,11 @@ accept="image/*">
 <div id="result" class="report-card">
 
     <div class="report-header">
-        <h2>🏭 AI Maintenance Report</h2>
+        <h2>🏭 RefineX AI</h2>
+
+    <p style="margin-top:8px;font-size:14px;opacity:.9;">
+    Predictive Maintenance Report
+    </p>
         <span id="reportTime"></span>
     </div>
 
@@ -705,11 +1084,16 @@ accept="image/*">
         <img id="reportImage" class="report-image">
 
     </div>
+    <button id="downloadReportBtn"
+        style="display:none;"
+        type="button">
 
+📄 Download AI Report
+
+</button>
 </div>
 
 </div>
-
 
 <!-- ═══════════════ FOOTER ═══════════════ -->
 
@@ -725,12 +1109,10 @@ accept="image/*">
         <a href="production.html">Production Analytics</a>
         <a href="equipment.html">Equipment Monitoring</a>
         <a href="safety.html">Safety Dashboard</a>
-        <a href="digital-twin.html">Digital Twin</a>
       </div>
       <div class="ft-col">
         <h4>AI & Tools</h4>
-        <a href="predictive.html">Predictive Maintenance</a>
-        <a href="forecasting.html">Production Forecasting</a>
+        <a href="../ml/production_forecasting/pf/templates/production_dashboard.html">Production Forecasting</a>
         <a href="ai-insights.html">AI Insights</a>
         <a href="ai-assistant.html">AI Assistant</a>
         <a href="reports.html">Reports Center</a>
@@ -748,14 +1130,17 @@ accept="image/*">
     </div>
     <div class="ft-bottom">
       <span>© 2026 RefineX · Team: Prince Raj, Sneha Agarwal, Ayush Kumar, Abhinandan Kumar Rai · IOCL Guwahati Refinery</span>
-      <div class="ft-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="contact.html">Contact</a></div>
+      <div class="ft-links"><a href="privacy.html">Privacy & Terms</a><a href="contact.html">Contact</a></div>
     </div>
   </footer>
 
 </main>
 </div><!-- /layout -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
+<script src="{{ url_for('static', filename='js/pdfReport.js') }}"></script>
 <script>
     let equipmentLimits = {};
     const analyzeBtn = document.getElementById("analyzeBtn");
@@ -1356,6 +1741,23 @@ colorStatus(
 // Current Readings
 // ==========================
 
+if(category.value === "Pump"){
+
+document.getElementById("reportTemperature").innerHTML =
+    document.querySelector("[name='suction_temperature']").value + " °C";
+
+document.getElementById("reportPressure").innerHTML =
+    document.querySelector("[name='discharge_pressure']").value + " bar";
+
+document.getElementById("reportVibration").innerHTML =
+    document.querySelector("[name='pump_de_h']").value;
+
+document.getElementById("reportHours").innerHTML =
+    "--";
+
+}
+else{
+
 document.getElementById("reportTemperature").innerHTML =
     temperature.value + " °C";
 
@@ -1368,6 +1770,7 @@ document.getElementById("reportVibration").innerHTML =
 document.getElementById("reportHours").innerHTML =
     hours.value + " hrs";
 
+}
 // ==========================
 // Image Preview
 // ==========================
@@ -1388,6 +1791,7 @@ if(preview.src){
 
 document.getElementById("reportTime").innerHTML =
     new Date().toLocaleString();
+    document.getElementById("downloadReportBtn").style.display = "block";
 
 }
 
@@ -1414,9 +1818,39 @@ alert(err);
 }
 
 });
+// =========================
+// Dynamic Pump Form
+// =========================
 
+const categorySelect = document.getElementById("category");
+const genericForm = document.getElementById("genericForm");
+const pumpForm = document.getElementById("pumpForm");
 
-// ── Sidebar Toggle ──
+function toggleForms() {
+
+    const isPump = categorySelect.value === "Pump";
+
+    genericForm.style.display = isPump ? "none" : "block";
+    pumpForm.style.display = isPump ? "block" : "none";
+
+    // Generic inputs
+    genericForm.querySelectorAll("input").forEach(input => {
+        input.required = !isPump;
+    });
+
+    // Pump inputs
+    pumpForm.querySelectorAll("input").forEach(input => {
+        input.required = isPump;
+    });
+
+}
+
+categorySelect.addEventListener("change", toggleForms);
+
+toggleForms();
+
+    </script>
+<script>// ── Sidebar Toggle ──
 const sidebar = document.getElementById('sidebar');
 const mainArea = document.getElementById('mainArea');
 document.getElementById('sidebarToggle').addEventListener('click', () => {
@@ -1442,7 +1876,7 @@ document.addEventListener("DOMContentLoaded", () => {
       window.location.href = "login.html";
     }
 
-    </script>
+</script>
 
 </body>
 </html>

@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RefineX – AI Insights Engine | IOCL Guwahati</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);}
+
+    /* ===== VARIABLES ===== */
+    :root{
+    --primary:#dd571c;
+        --primary-dark:#b8440f;
+        --primary-light:#f0784a;
+        --surface:#22262e;
+        --border:#2e3340;
+        --text:#e8eaf0;
+        --muted:#8b909e;
+        --accent-green:#22c55e;
+        --accent-yellow:#f59e0b;
+        --accent-red:#ef4444;
+        --accent-blue:#3b82f6;
+        --accent-purple:#a855f7;
+
+
+        --brand:#dd571c;
+        --brand-dark:#b8430f;
+        --brand-light:#f07040;
+        --brand-faint:#fff2ec;
+        --dark:#1a1a2e;
+        --dark-mid:#16213e;
+        --white:#ffffff;
+        --success:#10b981;
+        --warning:#f59e0b;
+        --danger:#ef4444;
+        --info:#3b82f6;
+        --sidebar-w:258px;
+        --nav-h:64px;
+        --radius:10px;
+        --radius-lg:16px;
+        --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06);
+        --tr:.22s cubic-bezier(.4,0,.2,1);
+        --bg: #0d0e10;
+        --bg2: #14161a;
+        --bg3: #1c1f25;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;height:var(--nav-h);background:var(--bg2);display:flex;align-items:center;padding:0 20px;gap:12px;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+        .nav-toggle{background:none;border:none;cursor:pointer;color:#fff;font-size:20px;padding:6px 8px;border-radius:6px;transition:background var(--tr);flex-shrink:0}
+        .nav-toggle:hover{background:rgba(255,255,255,.1)}
+        .nav-brand{text-decoration: none;display:flex;align-items:center;gap:10px;font-family:'Rajdhani',sans-serif;font-size:1.45rem;font-weight:700;color:#fff}
+        .nav-brand .logo{width:34px;height:34px;background:var(--brand);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px}
+        .nav-links{display:flex;align-items:center;gap:2px;margin-left:auto}
+        .nav-links a{text-decoration: none;color:#9aaac4;font-size:13px;font-weight:500;padding:6px 11px;border-radius:6px;transition:all var(--tr)}
+        .nav-links a:hover,.nav-links a.active{color:#fff;background:rgba(221,87,28,.22)}
+        .nav-right{display:flex;align-items:center;gap:8px;margin-left:12px}
+        .nav-btn{width:36px;height:36px;border-radius:8px;border:none;background:rgba(255,255,255,.08);color:#ccc;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all var(--tr);position:relative}
+        .nav-btn:hover{background:var(--brand);color:#fff}
+        .nav-badge{position:absolute;top:-4px;right:-4px;background:var(--brand);color:#fff;font-size:9px;font-weight:700;padding:1px 4px;border-radius:10px;min-width:16px;text-align:center}
+        .nav-user{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.07);border-radius:8px;padding:5px 10px;cursor:pointer}
+        .nav-avatar{width:28px;height:28px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+        .nav-uname{color:#ddd;font-size:12px;font-weight:500}
+
+        .brand-text{display:flex;flex-direction:column;}
+        .brand-name{ font-size:32px;font-weight:700;font-family:'Poppins', sans-serif;line-height:1;}
+        .brand-nameX{color:var(--brand)}
+        .brand-subtitle{font-size:11px;font-weight:500;font-family:'Montserrat', sans-serif; /* Change this */color:#ddd7d7;letter-spacing:1px;text-transform: uppercase;}
+
+
+        /* ===== LAYOUT ===== */
+        .layout{display:flex;margin-top:var(--nav-h);flex:1}
+
+        /* ===== SIDEBAR ===== */
+        .sidebar{width:var(--sidebar-w);background:var(--bg2);position:fixed;top:var(--nav-h);bottom:0;left:0;overflow-y:auto;overflow-x:hidden;transition:width var(--tr);z-index:900;display:flex;flex-direction:column}
+        .sidebar.collapsed{width:62px}
+        .sidebar::-webkit-scrollbar{width:3px}
+        .sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:2px}
+        .sb-section{padding:6px 0}
+        .sb-label{padding:6px 18px;font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#4a5a74;white-space:nowrap;overflow:hidden}
+        .sidebar.collapsed .sb-label{opacity:0}
+        .sb-link{display:flex;align-items:center;gap:11px;padding:9px 18px;color:#7a90aa;font-size:13px;font-weight:500;border-left:3px solid transparent;transition:all var(--tr);white-space:nowrap;cursor:pointer;text-decoration:none}
+        .sb-link .si{font-size:16px;flex-shrink:0;width:20px;text-align:center}
+        .sb-link .sl{overflow:hidden;transition:opacity var(--tr)}
+        .sidebar.collapsed .sl{opacity:0;width:0}
+        .sb-link:hover{color:#fff;background:rgba(221,87,28,.12)}
+        .sb-link.active{color:var(--brand-light);border-left-color:var(--brand);background:rgba(221,87,28,.15)}
+        .sb-badge{margin-left:auto;background:var(--brand);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;flex-shrink:0}
+        .sidebar.collapsed .sb-badge{display:none}
+
+        /* ===== MAIN ===== */
+        .main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;transition:margin-left var(--tr)}
+        .main.expanded{margin-left:62px}
+
+    /* ── HERO ── */
+    .hero{position:relative;padding:44px 48px 36px;background:linear-gradient(135deg,#0d0e10 0%,#100d14 50%,#0e0d10 100%);border-bottom:1px solid var(--border);overflow:hidden;}
+    .hero::before{content:'';position:absolute;top:0;right:0;width:60%;height:100%;background:radial-gradient(ellipse at 80% 40%,rgba(168,85,247,0.1) 0%,transparent 65%);pointer-events:none;}
+    .hero::after{content:'';position:absolute;top:0;left:25%;width:40%;height:100%;background:radial-gradient(ellipse at 50% 50%,rgba(221,87,28,0.06) 0%,transparent 65%);pointer-events:none;}
+    .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.3);color:#c084fc;font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;margin-bottom:16px;text-transform:uppercase;letter-spacing:0.07em;}
+    .hero-eyebrow::before{content:'●';font-size:8px;animation:blink 1.8s infinite;}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+    .hero h1{font-family:'Rajdhani',sans-serif;font-size:48px;font-weight:700;color:#fff;line-height:1.05;margin-bottom:10px;}
+    .hero h1 .hl{color:var(--accent-purple);}
+    .hero-sub{font-size:15px;color:var(--muted);max-width:100%;line-height:1.6;margin-bottom:28px;}
+    .hero-stats{display:flex;gap:28px;flex-wrap:wrap;}
+    .hero-stat{display:flex;align-items:center;gap:10px;}
+    .hero-stat-val{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:#fff;}
+    .hero-stat-lbl{font-size:12px;color:var(--muted);}
+    .hero-stat-dot{width:8px;height:8px;border-radius:50%;}
+
+    /* ── GENERATE BUTTON SECTION ── */
+    .gen-bar{padding:20px 48px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+    .gen-label{font-size:13.5px;color:var(--muted);font-weight:500;}
+    .gen-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--accent-purple),#7c3aed);color:#fff;border:none;cursor:pointer;padding:11px 24px;border-radius:9px;font-size:14px;font-weight:700;transition:all .25s;letter-spacing:0.02em;}
+    .gen-btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(168,85,247,0.35);}
+    .gen-btn.loading{opacity:.7;cursor:not-allowed;}
+    .gen-select{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:11px 14px;border-radius:9px;font-size:13.5px;outline:none;cursor:pointer;}
+    .gen-select:focus{border-color:var(--accent-purple);}
+    .last-gen{font-size:12px;color:var(--muted);margin-left:auto;}
+
+    /* ── SCORE ROW ── */
+    .score-row{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border);}
+    .score-card{background:var(--bg3);padding:22px 20px;text-align:center;position:relative;overflow:hidden;}
+    .score-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;}
+    .score-card.s1::after{background:var(--primary);}
+    .score-card.s2::after{background:var(--accent-green);}
+    .score-card.s3::after{background:var(--accent-yellow);}
+    .score-card.s4::after{background:var(--accent-blue);}
+    .score-card.s5::after{background:var(--accent-purple);}
+    .score-icon{font-size:22px;margin-bottom:8px;}
+    .score-val{font-family:'Rajdhani',sans-serif;font-size:32px;font-weight:700;color:#fff;line-height:1;}
+    .score-lbl{font-size:11.5px;color:var(--muted);margin-top:4px;}
+    .score-trend{font-size:11px;margin-top:5px;}
+
+    /* ── LAYOUT ── */
+    .content{display:grid;grid-template-columns:1fr 340px;gap:0;}
+
+    /* ── LEFT FEED ── */
+    .insight-feed{padding:32px 40px;display:flex;flex-direction:column;gap:24px;}
+    .feed-section-title{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+    .feed-section-title span{font-size:12px;font-weight:600;padding:2px 10px;border-radius:20px;font-family:'Inter',sans-serif;}
+    .feed-section-title span.new{background:rgba(239,68,68,0.12);color:var(--accent-red);}
+    .feed-section-title span.ai{background:rgba(168,85,247,0.12);color:var(--accent-purple);}
+
+    /* INSIGHT CARD */
+    .insight-card{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:24px;position:relative;overflow:hidden;transition:border-color .25s,transform .25s;}
+    .insight-card:hover{border-color:rgba(168,85,247,0.35);transform:translateY(-2px);}
+    .insight-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+    .insight-card.critical::before{background:linear-gradient(90deg,var(--accent-red),transparent);}
+    .insight-card.warning::before{background:linear-gradient(90deg,var(--accent-yellow),transparent);}
+    .insight-card.opportunity::before{background:linear-gradient(90deg,var(--accent-green),transparent);}
+    .insight-card.info::before{background:linear-gradient(90deg,var(--accent-blue),transparent);}
+    .insight-card.ai-gen::before{background:linear-gradient(90deg,var(--accent-purple),transparent);}
+    .ic-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:12px;}
+    .ic-left{display:flex;align-items:flex-start;gap:14px;}
+    .ic-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+    .ic-icon.red{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);}
+    .ic-icon.yellow{background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);}
+    .ic-icon.green{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);}
+    .ic-icon.blue{background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);}
+    .ic-icon.purple{background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.2);}
+    .ic-header h3{font-size:15.5px;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.3;}
+    .ic-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+    .type-tag{font-size:10px;font-weight:800;padding:2px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:0.07em;}
+    .type-tag.critical{background:rgba(239,68,68,0.12);color:var(--accent-red);}
+    .type-tag.warning{background:rgba(245,158,11,0.12);color:var(--accent-yellow);}
+    .type-tag.opportunity{background:rgba(34,197,94,0.12);color:var(--accent-green);}
+    .type-tag.info{background:rgba(59,130,246,0.12);color:var(--accent-blue);}
+    .type-tag.ai{background:rgba(168,85,247,0.12);color:var(--accent-purple);}
+    .cat-tag-sm{font-size:11px;color:var(--muted);font-weight:600;}
+    .ic-time{font-size:11px;color:var(--muted);white-space:nowrap;}
+    .ic-body{font-size:13.5px;color:var(--muted);line-height:1.6;margin-bottom:14px;}
+    .ic-body strong{color:var(--text);}
+    .ic-metrics{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
+    .ic-metric{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 14px;}
+    .ic-metric label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;display:block;margin-bottom:3px;}
+    .ic-metric .mv{font-size:15px;font-weight:700;color:var(--text);}
+    .ic-footer{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+    .act-btn{font-size:12.5px;font-weight:600;padding:7px 16px;border-radius:8px;cursor:pointer;border:none;transition:all .2s;}
+    .act-btn.primary{background:var(--primary);color:#fff;}
+    .act-btn.primary:hover{background:var(--primary-dark);}
+    .act-btn.ghost{background:var(--surface);color:var(--text);border:1px solid var(--border);}
+    .act-btn.ghost:hover{border-color:var(--primary);color:var(--primary);}
+    .act-btn.purple{background:rgba(168,85,247,0.15);color:var(--accent-purple);border:1px solid rgba(168,85,247,0.25);}
+    .act-btn.purple:hover{background:rgba(168,85,247,0.25);}
+    .confidence-wrap{display:flex;align-items:center;gap:8px;margin-left:auto;}
+    .confidence-label{font-size:11px;color:var(--muted);}
+    .confidence-bar{width:70px;height:5px;background:var(--border);border-radius:3px;overflow:hidden;}
+    .confidence-fill{height:100%;border-radius:3px;}
+
+    /* ── RIGHT PANEL ── */
+    .right-panel{border-left:1px solid var(--border);background:var(--bg2);padding:24px 20px;display:flex;flex-direction:column;gap:18px;}
+    .panel-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:20px;}
+    .panel-card h4{font-size:13px;font-weight:700;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:7px;}
+    .panel-card h4 span{font-size:11px;font-weight:600;color:var(--muted);}
+    .panel-card canvas{max-height:170px;}
+    .model-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;}
+    .model-row:last-child{border-bottom:none;}
+    .model-name{color:var(--text);font-weight:500;}
+    .model-status{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;}
+    .model-dot{width:7px;height:7px;border-radius:50%;}
+    .priority-item{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;}
+    .priority-item:last-child{margin-bottom:0;}
+    .p-num{width:22px;height:22px;border-radius:6px;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0;margin-top:1px;}
+    .p-text{font-size:13px;color:var(--text);line-height:1.4;}
+    .p-sub{font-size:11.5px;color:var(--muted);margin-top:2px;}
+    .summary-text{font-size:13.5px;color:var(--muted);line-height:1.65;}
+    .summary-text strong{color:var(--text);}
+
+    /* ── LOADING OVERLAY ── */
+    .loading-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center;flex-direction:column;gap:16px;}
+    .loading-overlay.show{display:flex;}
+    .loader-box{background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:36px 48px;text-align:center;}
+    .loader-spinner{width:44px;height:44px;border:3px solid var(--border);border-top-color:var(--accent-purple);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .loader-text{font-size:15px;font-weight:600;color:var(--text);margin-bottom:6px;}
+    .loader-sub{font-size:13px;color:var(--muted);}
+    .loader-steps{margin-top:16px;display:flex;flex-direction:column;gap:6px;}
+    .loader-step{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:8px;}
+    .loader-step.done{color:var(--accent-green);}
+    .loader-step.active{color:var(--accent-purple);}
+
+    /* ===== FOOTER ===== */
+footer{background:var(--bg2);color:#8fa0b8;padding:44px 40px 0;margin-top:auto}
+.ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:36px;padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,.08)}
+.ft-brand{font-family:'Rajdhani',sans-serif;font-size:1.4rem;font-weight:700;color:#fff;margin-bottom:9px}
+.ft-brand span{color:var(--brand)}
+.ft-desc{font-size:13px;line-height:1.7;max-width:270px}
+.ft-col h4{color:#fff;font-size:12px;font-weight:700;margin-bottom:13px;text-transform:uppercase;letter-spacing:.8px}
+.ft-col a{text-decoration: none;display:block;font-size:13px;margin-bottom:8px;transition:color var(--tr);color:#8fa0b8}
+.ft-col a:hover{color:var(--brand-light)}
+/* Subscribe */
+.sub-box{display:flex;flex-direction:column;gap:9px}
+.sub-box p{font-size:12px;color:#8fa0b8}
+.sub-form{display:flex;gap:7px}
+.sub-input{flex:1;padding:8px 12px;border-radius:8px;border:1.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;font-size:13px;outline:none;font-family:'Inter',sans-serif}
+.sub-input::placeholder{color:#6b7a99}
+.sub-input:focus{border-color:var(--brand)}
+.sub-btn{padding:8px 16px;background:var(--brand);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:background var(--tr);font-family:'Inter',sans-serif}
+.sub-btn:hover{background:var(--brand-dark)}
+.ft-bottom{display:flex;align-items:center;justify-content:space-between;padding:14px 0;font-size:11px;flex-wrap:wrap;gap:8px}
+.ft-links{display:flex;gap:14px}
+.ft-links a{text-decoration: none;color:#8fa0b8;transition:color var(--tr)}.ft-links a:hover{color:var(--brand-light)}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1100px){.feat-grid{grid-template-columns:repeat(2,1fr)}.g4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.hero{flex-direction:column}.hero-visual{width:100%;flex:none}.hero-title{font-size:3rem}}
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);width:258px}.sidebar.open{transform:translateX(0)}
+  .main{margin-left:0!important}.nav-links{display:none}
+  .g2,.g4,.feat-grid{grid-template-columns:1fr}
+  .ft-grid{grid-template-columns:1fr}.content{padding:14px}
+}
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <button class="nav-toggle" id="sidebarToggle">☰</button>
+  <a href="index.html" class="nav-brand">
+        <div class="logo">RX</div>
+
+        <div class="brand-text">
+            <span class="brand-name">Refine<span class="brand-nameX">X</span></span>
+            <span class="brand-subtitle">IOCL Guwahati</span>
+        </div>
+    </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="features.html">Features</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="team.html">Team</a>
+    <a href="contact.html">Contact</a>
+    <a id="profile-link" href="profile.html" style="display: none;">Profile</a>
+        <a id="logout-link" href="#" style="display: none;" onclick="logout()">Logout</a>
+        <a id="login-link" href="login.html">Login</a>
+        <a id="signup-link" href="signup.html">Sign Up</a>
+  </div>
+  <div class="nav-right">
+    <button class="nav-btn" onclick="location.href='alerts.html'" title="Alerts">🔔<span class="nav-badge">3</span></button>
+    <button class="nav-btn" onclick="location.href='ai-assistant.html'" title="AI Assistant">🤖</button>
+    
+  </div>
+</nav>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sb-section">
+    <div class="sb-label">Main</div>
+    <a href="index.html" class="sb-link"><span class="si">🏠</span><span class="sl">Home</span></a>
+    <a href="about.html" class="sb-link"><span class="si">ℹ️</span><span class="sl">About</span></a>
+    <a href="features.html" class="sb-link"><span class="si">⭐</span><span class="sl">Features</span></a>
+    <a href="team.html" class="sb-link"><span class="si">👥</span><span class="sl">Team</span></a>
+    <a href="contact.html" class="sb-link"><span class="si">📬</span><span class="sl">Contact</span></a>
+  </div>
+  <div class="sb-section">
+    <div class="sb-label">Analytics</div>
+    <a href="dashboard.html" class="sb-link"><span class="si">📊</span><span class="sl">Executive Dashboard</span></a>
+    <a href="safety.html" class="sb-link"><span class="si">🛡️</span><span class="sl">Safety Dashboard</span></a>
+    <a href="energy.html" class="sb-link"><span class="si">⚡</span><span class="sl">Energy Analytics</span></a>
+    <a href="carbon.html" class="sb-link"><span class="si">🌿</span><span class="sl">Carbon Emissions</span></a>
+  </div>
+  <div class="sb-section">
+    <div class="sb-label">Operations</div>
+    <a href="equipment.html" class="sb-link"><span class="si">⚙️</span><span class="sl">Equipment Monitoring</span></a>
+    <a href="incidents.html" class="sb-link"><span class="si">🚨</span><span class="sl">Incident Management</span></a>
+    <a href="../ml/production_forecasting/pf/templates/production_dashboard.html" class="sb-link"><span class="si">📈</span><span class="sl">Production Forecasting</span></a>
+    <a href="../ml/production_forecasting/pf/templates/density_dashboard.html" class="sb-link"><span class="si">⚗️</span><span class="sl">Density Forecasting</span></a>
+    <a href="alerts.html" class="sb-link"><span class="si">🔔</span><span class="sl">Alert Center</span><span class="sb-badge">3</span></a>
+  </div>
+  <div class="sb-section">
+    <div class="sb-label">More</div>
+    <a href="reports.html" class="sb-link"><span class="si">📄</span><span class="sl">Reports Center</span></a>
+    <a href="innovation.html" class="sb-link"><span class="si">🚀</span><span class="sl">Innovation Hub</span></a>
+    <a href="profile.html" class="sb-link"><span class="si">🔐</span><span class="sl">Profile</span></a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main" id="mainArea">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-eyebrow">💡 AI Insights Engine · v2.1</div>
+      <h1>Smart <span class="hl">AI Insights</span><br>for Guwahati Refinery</h1>
+      <p class="hero-sub">Our AI engine combines outputs from 6 ML models — Predictive Maintenance, Forecasting, Incident Classifier, Anomaly Detector, Energy Optimizer, and Safety Analyzer — to deliver prioritized, actionable intelligence across all plant operations.</p>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="hero-stat-dot" style="background:var(--accent-purple)"></div><div><div class="hero-stat-val">6</div><div class="hero-stat-lbl">Active ML Models</div></div></div>
+        <div class="hero-stat"><div class="hero-stat-dot" style="background:var(--accent-green)"></div><div><div class="hero-stat-val" id="insightCount">12</div><div class="hero-stat-lbl">Insights Generated</div></div></div>
+        <div class="hero-stat"><div class="hero-stat-dot" style="background:var(--accent-yellow)"></div><div><div class="hero-stat-val">3</div><div class="hero-stat-lbl">Critical Actions</div></div></div>
+        <div class="hero-stat"><div class="hero-stat-dot" style="background:var(--primary)"></div><div><div class="hero-stat-val">₹61L</div><div class="hero-stat-lbl">Est. Monthly Saving</div></div></div>
+      </div>
+    </div>
+
+    <!-- GENERATE BAR -->
+    <div class="gen-bar">
+      <span class="gen-label">Regenerate insights:</span>
+      <select class="gen-select" id="scopeSelect">
+        <option value="all">All Categories</option>
+        <option value="maintenance">Maintenance Only</option>
+        <option value="production">Production Only</option>
+        <option value="safety">Safety Only</option>
+        <option value="energy">Energy Only</option>
+        <option value="cost">Cost Optimization</option>
+      </select>
+      <button class="gen-btn" id="genBtn" onclick="generateInsights()">✨ Generate AI Insights</button>
+      <span class="last-gen" id="lastGen">Last generated: Today, <span id="genTime"></span></span>
+    </div>
+
+    <!-- SCORE STRIP -->
+    <div class="score-row">
+      <div class="score-card s1"><div class="score-icon">🏭</div><div class="score-val" style="color:var(--primary)">94.7</div><div class="score-lbl">Production Score</div><div class="score-trend" style="color:var(--accent-green)">↑ 1.1 this week</div></div>
+      <div class="score-card s2"><div class="score-icon">🛡️</div><div class="score-val" style="color:var(--accent-green)">97.3</div><div class="score-lbl">Safety Score</div><div class="score-trend" style="color:var(--accent-green)">↑ Excellent</div></div>
+      <div class="score-card s3"><div class="score-icon">⚡</div><div class="score-val" style="color:var(--accent-yellow)">81.4</div><div class="score-lbl">Energy Score</div><div class="score-trend" style="color:var(--accent-yellow)">⚠ 2.1% above baseline</div></div>
+      <div class="score-card s4"><div class="score-icon">❤️</div><div class="score-val" style="color:var(--accent-blue)">88.0</div><div class="score-lbl">Equipment Health</div><div class="score-trend" style="color:var(--accent-red)">⚠ 2 assets flagged</div></div>
+      <div class="score-card s5"><div class="score-icon">💡</div><div class="score-val" style="color:var(--accent-purple)">91.2</div><div class="score-lbl">Overall AI Score</div><div class="score-trend" style="color:var(--accent-green)">↑ Good standing</div></div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="content">
+      <!-- INSIGHT FEED -->
+      <div class="insight-feed" id="insightFeed">
+
+        <!-- SECTION: CRITICAL -->
+        <div class="feed-section-title">🔴 Critical Actions Required <span class="new">3 NEW</span></div>
+
+        <!-- CARD 1 -->
+        <div class="insight-card critical">
+          <div class="ic-top">
+            <div class="ic-left">
+              <div class="ic-icon red">🔧</div>
+              <div class="ic-header">
+                <h3>Pump P-101 (CDU) – Imminent Bearing Failure Risk</h3>
+                <div class="ic-meta">
+                  <span class="type-tag critical">Critical</span>
+                  <span class="cat-tag-sm">Predictive Maintenance · CDU Unit</span>
+                </div>
+              </div>
+            </div>
+            <div class="ic-time">12 min ago</div>
+          </div>
+          <div class="ic-body">
+            The <strong>Random Forest model</strong> predicts a <strong>78% probability of bearing failure within 5–7 days</strong> based on current vibration readings (14.8 mm/s — 2.3× threshold), temperature at 112°C, and runtime of 8,240 hrs since last overhaul. This pump is on the critical path for CDU crude charge — an unplanned failure would halt CDU operations and result in estimated production loss of <strong>₹1.2 Cr/day</strong>.
+          </div>
+          <div class="ic-metrics">
+            <div class="ic-metric"><label>Failure Probability</label><div class="mv" style="color:var(--accent-red)">78%</div></div>
+            <div class="ic-metric"><label>Vibration</label><div class="mv" style="color:var(--accent-red)">14.8 mm/s</div></div>
+            <div class="ic-metric"><label>Days to Action</label><div class="mv" style="color:var(--accent-yellow)">≤ 5 days</div></div>
+            <div class="ic-metric"><label>Production at Risk</label><div class="mv">₹1.2 Cr/day</div></div>
+          </div>
+          <div class="ic-footer">
+            <button class="act-btn primary" onclick="markDone(this)">✓ Schedule Inspection</button>
+            <button class="act-btn ghost">View Equipment →</button>
+            <div class="confidence-wrap">
+              <span class="confidence-label">AI Confidence</span>
+              <div class="confidence-bar"><div class="confidence-fill" style="width:92%;background:var(--accent-red)"></div></div>
+              <span style="font-size:11px;color:var(--accent-red);font-weight:700;">92%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 2 -->
+        <div class="insight-card critical">
+          <div class="ic-top">
+            <div class="ic-left">
+              <div class="ic-icon red">🚨</div>
+              <div class="ic-header">
+                <h3>CDU Overhead Pressure Spike – Incident INC-062 Still Open</h3>
+                <div class="ic-meta">
+                  <span class="type-tag critical">Critical</span>
+                  <span class="cat-tag-sm">Incident Classifier · Safety</span>
+                </div>
+              </div>
+            </div>
+            <div class="ic-time">4 hrs ago</div>
+          </div>
+          <div class="ic-body">
+            The <strong>Incident AI Classifier (DistilBERT)</strong> has flagged INC-062 with a <strong>risk score of 91%</strong> — the highest this month. The pressure spike event on the CDU overhead line is showing a pattern similar to 2 historical incidents that led to safety valve actuation. <strong>Root cause has not been identified yet.</strong> Recommend convening a cross-functional review with Process, Safety, and Maintenance teams within 24 hours.
+          </div>
+          <div class="ic-metrics">
+            <div class="ic-metric"><label>AI Risk Score</label><div class="mv" style="color:var(--accent-red)">91%</div></div>
+            <div class="ic-metric"><label>Incident ID</label><div class="mv">#INC-062</div></div>
+            <div class="ic-metric"><label>Status</label><div class="mv" style="color:var(--accent-red)">Open</div></div>
+            <div class="ic-metric"><label>Similar Past Incidents</label><div class="mv">2 matches</div></div>
+          </div>
+          <div class="ic-footer">
+            <button class="act-btn primary" onclick="markDone(this)">✓ Assign Investigator</button>
+            <button class="act-btn ghost">View Incident →</button>
+            <div class="confidence-wrap">
+              <span class="confidence-label">AI Confidence</span>
+              <div class="confidence-bar"><div class="confidence-fill" style="width:89%;background:var(--accent-red)"></div></div>
+              <span style="font-size:11px;color:var(--accent-red);font-weight:700;">89%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 3 -->
+        <div class="insight-card critical">
+          <div class="ic-top">
+            <div class="ic-left">
+              <div class="ic-icon red">💨</div>
+              <div class="ic-header">
+                <h3>Steam Boiler B-501 – Multiple Degradation Signals Converging</h3>
+                <div class="ic-meta">
+                  <span class="type-tag critical">Critical</span>
+                  <span class="cat-tag-sm">Anomaly Detector · Utilities</span>
+                </div>
+              </div>
+            </div>
+            <div class="ic-time">2 hrs ago</div>
+          </div>
+          <div class="ic-body">
+            The <strong>Anomaly Detection model</strong> has identified 3 simultaneous degradation signals on Boiler B-501: elevated drum pressure (+6.8%), increasing blowdown frequency, and a 4°C rise in flue gas exit temperature over 72 hrs. Individually, each signal is within tolerance. <strong>Together they form a high-risk convergence pattern</strong> seen in the dataset before 2 historical boiler trips. Health score has dropped from 78 → 70 in 5 days.
+          </div>
+          <div class="ic-metrics">
+            <div class="ic-metric"><label>Health Score</label><div class="mv" style="color:var(--accent-yellow)">70 / 100</div></div>
+            <div class="ic-metric"><label>Signals Converging</label><div class="mv" style="color:var(--accent-red)">3 of 3</div></div>
+            <div class="ic-metric"><label>Days Since Last Service</label><div class="mv">321 days</div></div>
+            <div class="ic-metric"><label>Action By</label><div class="mv" style="color:var(--accent-yellow)">2 days</div></div>
+          </div>
+          <div class="ic-footer">
+            <button class="act-btn primary" onclick="markDone(this)">✓ Raise Work Order</button>
+            <button class="act-btn ghost">View Equipment →</button>
+            <div class="confidence-wrap">
+              <span class="confidence-label">AI Confidence</span>
+              <div class="confidence-bar"><div class="confidence-fill" style="width:84%;background:var(--accent-yellow)"></div></div>
+              <span style="font-size:11px;color:var(--accent-yellow);font-weight:700;">84%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION: WARNINGS -->
+        <div class="feed-section-title" style="margin-top:8px;">🟡 Warnings &amp; Watch Items <span class="new" style="background:rgba(245,158,11,0.12);color:var(--accent-yellow)">4 ITEMS</span></div>
+
+        <!-- CARD 4 -->
+        <div class="insight-card warning">
+          <div class="ic-top">
+            <div class="ic-left">
+              <div class="ic-icon yellow">⚡</div>
+              <div class="ic-header">
+                <h3>Electricity Consumption 2.1% Above Weekly Baseline</h3>
+                <div class="ic-meta">
+                  <span class="type-tag warning">Warning</span>
+                  <span class="cat-tag-sm">Energy Optimizer · Utilities</span>
+                </div>
+              </div>
+            </div>
+            <div class="ic-time">1 hr ago</div>
+          </div>
+          <div class="ic-body">
+            The <strong>Energy Optimization model</strong> detected a sustained 2.1% electricity overconsumption since Monday. Root cause analysis points to 3 steam traps operating in failed-open state (wasting steam equivalent to <strong>~38 GJ/day</strong>) and the CDU furnace running at 18% excess air vs recommended 12–14%. Combined, these account for an estimated <strong>₹22L/month in avoidable energy spend</strong>.
+          </div>
+          <div class="ic-metrics">
+            <div class="ic-metric"><label>Overconsumption</label><div class="mv" style="color:var(--accent-yellow)">+2.1%</div></div>
+            <div class="ic-metric"><label>Excess Air (Furnace)</label><div class="mv" style="color:var(--accent-yellow)">18%</div></div>
+            <div class="ic-metric"><label>Steam Traps Failing</label><div class="mv" style="color:var(--accent-red)">3</div></div>
+            <div class="ic-metric"><label>Monthly Loss</label><div class="mv">₹22L</div></div>
+          </div>
+          <div class="ic-footer">
+            <button class="act-btn primary" onclick="markDone(this)">✓ Audit Steam Traps</button>
+            <button class="act-btn ghost">Energy Dashboard →</button>
+            <div class="confidence-wrap">
+              <span class="confidence-label">AI Confidence</span>
+              <div class="confidence-bar"><div class="confidence-fill" style="width:78%;background:var(--accent-yellow)"></div></div>
+              <span style="font-size:11px;color:var(--accent-yellow);font-weight:700;">78%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 5 -->
+        <div class="insight-card warning">
+          <div class="ic-top">
+            <div class="ic-left">
+              <div class="ic-icon yellow">🔥</div>
+              <div class="ic-header">
+                <h3>ATF Production 0.8% Below Daily Target – Trend Worsening</h3>
+                <div class="ic-meta">
+                  <span class="type-tag warning">Warning</span>
+                  <span class="cat-tag-sm">Production Forecast · Hydrocracker</span>
+                </div>
+              </div>
+            </div>
+            <div class="ic-time">3 hrs ago</div>
+          </div>
+          <div class="ic-body">
+            The <strong>Prophet forecasting model</strong> projects that ATF production will miss the monthly target by <strong>~240 KL</strong> if the current rate holds. The shortfall has been worsening since last Thursday. The model attributes this to sub-optimal Hydrocracker operating severity — reactor outlet temperature is running 4°C below the recommended setpoint. Adjusting temperature could recover the gap within 48 hrs.
+          </div>
+          <div class="ic-metrics">
+            <div class="ic-metric"><label>Today's ATF Output</label><div class="mv" style="color:var(--accent-yellow)">620 KL</div></div>
+            <div class="ic-metric"><label>Target</label><div class="mv">625 KL</div></div>
+            <div class="ic-metric"><label>Monthly Gap Forecast</label><div class="mv" style="color:var(--accent-yellow)">–240 KL</div></div>
+            <div class="ic-metric"><label>Recovery Window</label><div class="mv">48 hrs</div></div>
+          </div>
+          <div class="ic-footer">
+            <button class="act-btn primary" onclick="markDone(this)">✓ Adjust HCU Setpoint</button>
+            <button class="act-btn ghost">Production Analytics →</button>
+            <div class="confidence-wrap">
+              <span class="confidence-label">AI Confidence</span>
+              <div class="confidence-bar"><div class="confidence-fill" style="width:76%;background:var(--accent-yellow)"></div></div>
+              <span style="font-size:11px;color:var(--accent-yellow);font-weight:700;">76%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 6 -->
+        <div class="insight-card warning">
+          <div class="ic-top">
+            <div class="ic-left">
+              <div class="ic-icon yellow">🧪</div>
+              <div class="ic-header">
+                <h3>Heat Exchanger HE-204 – Fouling Rate Accelerating</h3>
+                <div class="ic-meta">
+                  <span class="type-tag warning">Warning</span>
+                  <span class="cat-tag-sm">Anomaly Detector · CDU</span>
+                </div>
+              </div>
+            </div>
+            <div class="ic-time">5 hrs ago</div>
+          </div>
+          <div class="ic-body">
+            Fouling coefficient trend on HE-204 has increased by <strong>22% in the past 10 days</strong>, faster than the historical seasonal average. The AI model estimates the heat exchanger will reach a cleaning threshold within <strong>12–15 days</strong> at the current rate. Delaying beyond this point risks a 3–5% drop in CDU preheat efficiency, increasing furnace fuel consumption and CO₂ emissions proportionally.
+          </div>
+          <div class="ic-metrics">
+            <div class="ic-metric"><label>Fouling Increase</label><div class="mv" style="color:var(--accent-yellow)">+22%</div></div>
+            <div class="ic-metric"><label>Days to Clean Threshold</label><div class="mv" style="color:var(--accent-yellow)">12–15 days</div></div>
+            <div class="ic-metric"><label>Efficiency Risk</label><div class="mv">–3 to –5%</div></div>
+            <div class="ic-metric"><label>Health Score</label><div class="mv">74 / 100</div></div>
+          </div>
+          <div class="ic-footer">
+            <button class="act-btn primary" onclick="markDone(this)">✓ Schedule Cleaning</button>
+            <button class="act-btn ghost">Equipment Monitor →</button>
+            <div class="confidence-wrap">
+              <span class="confidence-label">AI Confidence</span>
+              <div class="confidence-bar"><div class="confidence-fill" style="width:81%;background:var(--accent-yellow)"></div></div>
+              <span style="font-size:11px;color:var(--accent-yellow);font-weight:700;">81%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 7 -->
+        <div class="insight-card warning">
+          <div class="ic-top">
+            <div class="ic-left">
+              <div class="ic-icon yellow">💧</div>
+              <div class="ic-header">
+                <h3>Water Consumption Trending 1.1% Above Target</h3>
+                <div class="ic-meta">
+                  <span class="type-tag warning">Warning</span>
+                  <span class="cat-tag-sm">Energy Optimizer · Sustainability</span>
+                </div>
+              </div>
+            </div>
+            <div class="ic-time">6 hrs ago</div>
+          </div>
+          <div class="ic-body">
+            Daily water consumption is at 18,400 KL vs a target of 18,200 KL. The AI model traced the excess to the cooling water blowdown rate in the Utilities section being set above the optimal range. Reducing blowdown frequency by 12% would bring consumption back within target without impacting cooling tower water quality.
+          </div>
+          <div class="ic-metrics">
+            <div class="ic-metric"><label>Consumption</label><div class="mv" style="color:var(--accent-yellow)">18,400 KL</div></div>
+            <div class="ic-metric"><label>Target</label><div class="mv">18,200 KL</div></div>
+            <div class="ic-metric"><label>Excess Daily</label><div class="mv">200 KL</div></div>
+          </div>
+          <div class="ic-footer">
+            <button class="act-btn primary" onclick="markDone(this)">✓ Optimise Blowdown</button>
+            <button class="act-btn ghost">Carbon Dashboard →</button>
+            <div class="confidence-wrap">
+              <span class="confidence-label">AI Confidence</span>
+              <div class="confidence-bar"><div class="confidence-fill" style="width:71%;background:var(--accent-yellow)"></div></div>
+              <span style="font-size:11px;color:var(--accent-yellow);font-weight:700;">71%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION: OPPORTUNITIES -->
+        <div class="feed-section-title" style="margin-top:8px;">🟢 Optimization Opportunities <span class="ai">AI Generated</span></div>
+
+        <!-- CARD 8 -->
+        <div class="insight-card opportunity">
+          <div class="ic-top">
+            <div class="ic-left">
+              <div class="ic-icon green">💰</div>
+              <div class="ic-header">
+                <h3>VFD Installation on Cooling Pumps Could Save ₹9L/month</h3>
+                <div class="ic-meta">
+                  <span class="type-tag opportunity">Opportunity</span>
+                  <span class="cat-tag-sm">Energy Optimizer · Utilities</span>
+                </div>
+              </div>
+            </div>
+            <div class="ic-time">Today, 08:00</div>
+          </div>
+          <div class="ic-body">
+            Cooling water pumps E-701 and E-702 are operating at fixed speed regardless of actual cooling demand, which varies by 30–40% across the day. Installing Variable Frequency Drives (VFDs) and linking them to a demand signal from the cooling tower return temperature would reduce electricity draw by an estimated 20–30% on these units — yielding <strong>₹9L/month in savings</strong> at current electricity tariffs.
+          </div>
+          <div class="ic-metrics">
+            <div class="ic-metric"><label>Estimated Saving</label><div class="mv" style="color:var(--accent-green)">₹9L/month</div></div>
+            <div class="ic-metric"><label>Energy Reduction</label><div class="mv" style="color:var(--accent-green)">20–30%</div></div>
+            <div class="ic-metric"><label>Payback Period</label><div class="mv">~14 months</div></div>
+          </div>
+          <div class="ic-footer">
+            <button class="act-btn primary" onclick="markDone(this)">✓ Submit to Innovation Hub</button>
+            <button class="act-btn ghost">Energy Analytics →</button>
+            <div class="confidence-wrap">
+              <span class="confidence-label">AI Confidence</span>
+              <div class="confidence-bar"><div class="confidence-fill" style="width:83%;background:var(--accent-green)"></div></div>
+              <span style="font-size:11px;color:var(--accent-green);font-weight:700;">83%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 9 -->
+        <div class="insight-card opportunity">
+          <div class="ic-top">
+            <div class="ic-left">
+              <div class="ic-icon green">📈</div>
+              <div class="ic-header">
+                <h3>FCC Unit Running Below Optimal Conversion Ratio</h3>
+                <div class="ic-meta">
+                  <span class="type-tag opportunity">Opportunity</span>
+                  <span class="cat-tag-sm">Production Forecast · FCC</span>
+                </div>
+              </div>
+            </div>
+            <div class="ic-time">Today, 07:30</div>
+          </div>
+          <div class="ic-body">
+            The ARIMA production model detected that the FCC unit's conversion ratio (gasoline yield per barrel of feed) has been running at 67.2% vs a historical optimal of 69.8% for current feed quality. A riser temperature increase of 3–4°C and minor catalyst top-up are projected to recover the 2.6% gap, adding an estimated <strong>180 KL/day of additional petrol output</strong> — approximately ₹18L/day incremental revenue.
+          </div>
+          <div class="ic-metrics">
+            <div class="ic-metric"><label>Current Conversion</label><div class="mv" style="color:var(--accent-yellow)">67.2%</div></div>
+            <div class="ic-metric"><label>Optimal Target</label><div class="mv" style="color:var(--accent-green)">69.8%</div></div>
+            <div class="ic-metric"><label>Petrol Gain</label><div class="mv" style="color:var(--accent-green)">+180 KL/day</div></div>
+            <div class="ic-metric"><label>Revenue Upside</label><div class="mv">₹18L/day</div></div>
+          </div>
+          <div class="ic-footer">
+            <button class="act-btn primary" onclick="markDone(this)">✓ Notify Process Team</button>
+            <button class="act-btn ghost">Production Analytics →</button>
+            <div class="confidence-wrap">
+              <span class="confidence-label">AI Confidence</span>
+              <div class="confidence-bar"><div class="confidence-fill" style="width:74%;background:var(--accent-green)"></div></div>
+              <span style="font-size:11px;color:var(--accent-green);font-weight:700;">74%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION: INFO -->
+        <div class="feed-section-title" style="margin-top:8px;">🔵 Informational Insights</div>
+
+        <!-- CARD 10 -->
+        <div class="insight-card info">
+          <div class="ic-top">
+            <div class="ic-left">
+              <div class="ic-icon blue">🌱</div>
+              <div class="ic-header">
+                <h3>Carbon Intensity Improved 6.2% Year-on-Year — Ahead of Target</h3>
+                <div class="ic-meta">
+                  <span class="type-tag info">Info</span>
+                  <span class="cat-tag-sm">Sustainability Model · ESG</span>
+                </div>
+              </div>
+            </div>
+            <div class="ic-time">Yesterday</div>
+          </div>
+          <div class="ic-body">
+            Carbon intensity has dropped from 77.2 kg CO₂/MT crude (Jan 2026) to 72.4 kg CO₂/MT (Jun 2026) — a <strong>6.2% improvement</strong> in 6 months. The AI model projects full-year carbon intensity of 70.8 kg CO₂/MT, putting Guwahati Refinery on track to achieve the <strong>2026 ESG milestone</strong> of 71 kg CO₂/MT 2 months ahead of schedule. Flaring reduction (-18%) is the biggest driver.
+          </div>
+          <div class="ic-metrics">
+            <div class="ic-metric"><label>Current Intensity</label><div class="mv" style="color:var(--accent-green)">72.4 kg/MT</div></div>
+            <div class="ic-metric"><label>YTD Improvement</label><div class="mv" style="color:var(--accent-green)">–6.2%</div></div>
+            <div class="ic-metric"><label>2026 Target</label><div class="mv">71.0 kg/MT</div></div>
+            <div class="ic-metric"><label>Forecast (Dec)</label><div class="mv" style="color:var(--accent-green)">70.8 kg/MT ✓</div></div>
+          </div>
+          <div class="ic-footer">
+            <button class="act-btn ghost">Carbon Dashboard →</button>
+            <div class="confidence-wrap">
+              <span class="confidence-label">AI Confidence</span>
+              <div class="confidence-bar"><div class="confidence-fill" style="width:88%;background:var(--accent-blue)"></div></div>
+              <span style="font-size:11px;color:var(--accent-blue);font-weight:700;">88%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 11 -->
+        <div class="insight-card info">
+          <div class="ic-top">
+            <div class="ic-left">
+              <div class="ic-icon blue">🛡️</div>
+              <div class="ic-header">
+                <h3>Safety Performance: 1,102 Accident-Free Days — Record for Guwahati Refinery</h3>
+                <div class="ic-meta">
+                  <span class="type-tag info">Info</span>
+                  <span class="cat-tag-sm">Safety Analyzer · All Units</span>
+                </div>
+              </div>
+            </div>
+            <div class="ic-time">Yesterday</div>
+          </div>
+          <div class="ic-body">
+            Guwahati Refinery has now completed <strong>1,102 consecutive accident-free days</strong> — a new refinery record. The Safety Analyzer model notes that near-miss reporting has increased by 40% over the past year, which is a positive indicator of safety culture maturity. PTW compliance is at 100% and all safety training certifications are current. The model projects <strong>94% probability</strong> of maintaining AFD status through December 2026 with current controls in place.
+          </div>
+          <div class="ic-footer">
+            <button class="act-btn ghost">Safety Dashboard →</button>
+            <div class="confidence-wrap">
+              <span class="confidence-label">AI Confidence</span>
+              <div class="confidence-bar"><div class="confidence-fill" style="width:94%;background:var(--accent-green)"></div></div>
+              <span style="font-size:11px;color:var(--accent-green);font-weight:700;">94%</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /insight-feed -->
+
+      <!-- RIGHT PANEL -->
+      <div class="right-panel">
+
+        <!-- AI Score Chart -->
+        <div class="panel-card">
+          <h4>🤖 AI Score Breakdown</h4>
+          <canvas id="scoreRadar"></canvas>
+        </div>
+
+        <!-- Model Status -->
+        <div class="panel-card">
+          <h4>⚙️ Model Status <span>6 active</span></h4>
+          <div class="model-row"><span class="model-name">Predictive Maintenance</span><div class="model-status"><div class="model-dot" style="background:var(--accent-green)"></div><span style="color:var(--accent-green)">Running</span></div></div>
+          <div class="model-row"><span class="model-name">Production Forecast</span><div class="model-status"><div class="model-dot" style="background:var(--accent-green)"></div><span style="color:var(--accent-green)">Running</span></div></div>
+          <div class="model-row"><span class="model-name">Incident Classifier</span><div class="model-status"><div class="model-dot" style="background:var(--accent-green)"></div><span style="color:var(--accent-green)">Running</span></div></div>
+          <div class="model-row"><span class="model-name">Anomaly Detector</span><div class="model-status"><div class="model-dot" style="background:var(--accent-green)"></div><span style="color:var(--accent-green)">Running</span></div></div>
+          <div class="model-row"><span class="model-name">Energy Optimizer</span><div class="model-status"><div class="model-dot" style="background:var(--accent-yellow)"></div><span style="color:var(--accent-yellow)">Updating</span></div></div>
+          <div class="model-row"><span class="model-name">Safety Analyzer</span><div class="model-status"><div class="model-dot" style="background:var(--accent-green)"></div><span style="color:var(--accent-green)">Running</span></div></div>
+        </div>
+
+        <!-- Top Priorities -->
+        <div class="panel-card">
+          <h4>🎯 Top Priority Actions</h4>
+          <div class="priority-item"><div class="p-num">1</div><div><div class="p-text">Inspect Pump P-101 bearings</div><div class="p-sub">≤ 5 days · Risk: Production loss</div></div></div>
+          <div class="priority-item"><div class="p-num">2</div><div><div class="p-text">Assign INC-062 investigator</div><div class="p-sub">Immediately · Risk: Repeat incident</div></div></div>
+          <div class="priority-item"><div class="p-num">3</div><div><div class="p-text">Raise WO for Boiler B-501</div><div class="p-sub">≤ 2 days · Risk: Unplanned trip</div></div></div>
+          <div class="priority-item"><div class="p-num">4</div><div><div class="p-text">Audit failing steam traps</div><div class="p-sub">This week · Save: ₹22L/month</div></div></div>
+          <div class="priority-item"><div class="p-num">5</div><div><div class="p-text">Schedule HE-204 cleaning</div><div class="p-sub">≤ 12 days · CDU efficiency risk</div></div></div>
+        </div>
+
+        <!-- Daily Summary -->
+        <div class="panel-card">
+          <h4>📝 AI Daily Summary</h4>
+          <div class="summary-text">
+            <strong>Today's plant is in Good condition overall (91.2/100).</strong> Three critical issues demand attention — P-101 vibration, INC-062 investigation, and Boiler B-501 convergence pattern. Production is on or above target for 4 of 5 products; ATF has a minor gap recoverable by adjusting HCU severity. Energy is 2.1% above baseline — the biggest lever is fixing the 3 failed steam traps. Safety remains excellent at 97.3, with 1,102 AFDs. Carbon trajectory is ahead of 2026 ESG targets. <strong>Total monthly savings available from AI-recommended actions: ₹61L.</strong>
+          </div>
+        </div>
+
+        <!-- Insight Trend -->
+        <div class="panel-card">
+          <h4>📊 Insights This Week</h4>
+          <canvas id="insightTrendChart"></canvas>
+        </div>
+
+      </div>
+    </div><!-- /content -->
+
+      <!-- FOOTER -->
+  <footer>
+    <div class="ft-grid">
+      <div>
+        <div class="ft-brand">Refine<span>X</span></div>
+        <p class="ft-desc">AI-Powered Smart Refinery Intelligence Platform for IOCL Guwahati Refinery — Summer Internship 2026. Heritage Institute of Technology, Kolkata · CSE Dept.</p>
+      </div>
+      <div class="ft-col">
+        <h4>Platform</h4>
+        <a href="dashboard.html">Executive Dashboard</a>
+        <a href="production.html">Production Analytics</a>
+        <a href="equipment.html">Equipment Monitoring</a>
+        <a href="safety.html">Safety Dashboard</a>
+      </div>
+      <div class="ft-col">
+        <h4>AI & Tools</h4>
+        <a href="../ml/production_forecasting/pf/templates/production_dashboard.html">Production Forecasting</a>
+        <a href="ai-insights.html">AI Insights</a>
+        <a href="ai-assistant.html">AI Assistant</a>
+        <a href="reports.html">Reports Center</a>
+      </div>
+      <div class="ft-col">
+        <h4>Stay Updated</h4>
+        <div class="sub-box">
+          <p>Get alerts and platform updates via email.</p>
+          <form class="sub-form" id="subForm">
+            <input type="email" class="sub-input" placeholder="Your email address" id="subEmail"/>
+            <button type="submit" class="sub-btn">Subscribe</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="ft-bottom">
+      <span>© 2026 RefineX · Team: Prince Raj, Sneha Agarwal, Ayush Kumar, Abhinandan Kumar Rai · IOCL Guwahati Refinery</span>
+      <div class="ft-links"><a href="privacy.html">Privacy & Terms</a><a href="contact.html">Contact</a></div>
+    </div>
+  </footer>
+
+</main>
+</div><!-- /layout -->
+
+<!-- LOADING OVERLAY -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loader-box">
+    <div class="loader-spinner"></div>
+    <div class="loader-text">Generating AI Insights…</div>
+    <div class="loader-sub">Analyzing data from 6 ML models</div>
+    <div class="loader-steps" id="loaderSteps">
+      <div class="loader-step" id="step1">⏳ Loading sensor data…</div>
+      <div class="loader-step" id="step2">⏳ Running Predictive Maintenance model…</div>
+      <div class="loader-step" id="step3">⏳ Running Production Forecast…</div>
+      <div class="loader-step" id="step4">⏳ Running Incident Classifier…</div>
+      <div class="loader-step" id="step5">⏳ Running Anomaly Detector…</div>
+      <div class="loader-step" id="step6">⏳ Compiling insights…</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Set current time
+  const now = new Date();
+  document.getElementById('genTime').textContent = now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+
+  // Radar Chart
+  new Chart(document.getElementById('scoreRadar'), {
+    type: 'radar',
+    data: {
+      labels: ['Production','Safety','Energy','Equipment','Cost','ESG'],
+      datasets: [{
+        label: 'AI Score',
+        data: [94.7, 97.3, 81.4, 88.0, 86.0, 89.0],
+        borderColor: '#a855f7',
+        backgroundColor: 'rgba(168,85,247,0.12)',
+        pointBackgroundColor: '#a855f7',
+        pointRadius: 4,
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        r: {
+          min: 60, max: 100,
+          ticks: { color: '#8b909e', font: { size: 9 }, stepSize: 10 },
+          grid: { color: '#2e3340' },
+          pointLabels: { color: '#8b909e', font: { size: 10 } }
+        }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+
+  // Insight trend
+  new Chart(document.getElementById('insightTrendChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+      datasets: [
+        { label: 'Critical', data: [1,2,1,3,2,1,3], backgroundColor: 'rgba(239,68,68,0.7)', borderRadius: 3 },
+        { label: 'Warning',  data: [3,2,4,2,3,2,4], backgroundColor: 'rgba(245,158,11,0.6)', borderRadius: 3 },
+        { label: 'Info',     data: [2,3,2,3,2,3,2], backgroundColor: 'rgba(59,130,246,0.5)', borderRadius: 3 }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { labels: { color: '#8b909e', font: { size: 10 } } } },
+      scales: {
+        x: { stacked: true, ticks: { color: '#8b909e', font: { size: 9 } }, grid: { color: '#2e3340' } },
+        y: { stacked: true, ticks: { color: '#8b909e', font: { size: 9 } }, grid: { color: '#2e3340' } }
+      }
+    }
+  });
+
+  // Acknowledge / Mark Done
+  function markDone(btn) {
+    const card = btn.closest('.insight-card');
+    btn.textContent = '✓ Done';
+    btn.style.background = '#22c55e';
+    btn.disabled = true;
+    card.style.opacity = '0.6';
+  }
+
+  // Generate Insights Animation
+  function generateInsights() {
+    const btn = document.getElementById('genBtn');
+    const overlay = document.getElementById('loadingOverlay');
+    btn.classList.add('loading');
+    btn.textContent = '⏳ Generating…';
+    overlay.classList.add('show');
+
+    const steps = ['step1','step2','step3','step4','step5','step6'];
+    const labels = [
+      '✅ Sensor data loaded',
+      '✅ Predictive Maintenance complete',
+      '✅ Production Forecast complete',
+      '✅ Incident Classifier complete',
+      '✅ Anomaly Detector complete',
+      '✅ Insights compiled'
+    ];
+    let i = 0;
+    const interval = setInterval(() => {
+      if(i > 0) {
+        document.getElementById(steps[i-1]).className = 'loader-step done';
+        document.getElementById(steps[i-1]).textContent = labels[i-1];
+      }
+      if(i < steps.length) {
+        document.getElementById(steps[i]).className = 'loader-step active';
+        document.getElementById(steps[i]).textContent = '⚡ ' + document.getElementById(steps[i]).textContent.replace('⏳ ','');
+      }
+      i++;
+      if(i > steps.length) {
+        clearInterval(interval);
+        setTimeout(() => {
+          overlay.classList.remove('show');
+          btn.classList.remove('loading');
+          btn.textContent = '✨ Generate AI Insights';
+          const t = new Date();
+          document.getElementById('genTime').textContent = t.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+          // Reset step labels
+          const orig = ['Loading sensor data…','Running Predictive Maintenance model…','Running Production Forecast…','Running Incident Classifier…','Running Anomaly Detector…','Compiling insights…'];
+          steps.forEach((s,idx) => {
+            document.getElementById(s).className = 'loader-step';
+            document.getElementById(s).textContent = '⏳ ' + orig[idx];
+          });
+        }, 600);
+      }
+    }, 650);
+  }
+</script>
+
+<script>
+// ── Sidebar Toggle ──
+const sidebar = document.getElementById('sidebar');
+const mainArea = document.getElementById('mainArea');
+document.getElementById('sidebarToggle').addEventListener('click', () => {
+  if (window.innerWidth <= 768) { sidebar.classList.toggle('open'); }
+  else { sidebar.classList.toggle('collapsed'); mainArea.classList.toggle('expanded'); }
+});
+document.addEventListener('click', e => {
+  if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !document.getElementById('sidebarToggle').contains(e.target))
+    sidebar.classList.remove('open');
+});
+
+// ── Login & Logout ──
+document.addEventListener("DOMContentLoaded", () => {
+      const token = localStorage.getItem("token");
+      document.getElementById("profile-link").style.display = token ? "inline-block" : "none";
+      document.getElementById("logout-link").style.display = token ? "inline-block" : "none";
+      document.getElementById("login-link").style.display = token ? "none" : "inline-block";
+      document.getElementById("signup-link").style.display = token ? "none" : "inline-block";
+    });
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = "login.html";
+    }
+</script>
+</body>
+</html>

@@ -5,14 +5,7 @@
   <title>RefineX – About | IOCL Guwahati</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
   <style>
-    :root{--primary:#dd571c;
-        --primary-dark:#b8440f;
-        --primary-light:#f0784a;
-        
-        --accent-green:#22c55e;
-        --accent-yellow:#f59e0b;
-        --accent-red:#ef4444;
-        --accent-blue:#3b82f6;
+    :root{
 
 
     --brand:#dd571c;
@@ -169,6 +162,118 @@
   .g2,.g4,.feat-grid{grid-template-columns:1fr}
   .ft-grid{grid-template-columns:1fr}.content{padding:14px}
 }
+
+.policy-container{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    padding:25px 20px;
+}
+
+.policy-card{
+
+    width:100%;
+    max-width:1000px;
+    
+    background:rgb(210, 210, 210);
+
+    padding:30px;
+
+    border-radius:15px;
+
+    box-shadow:0 10px 35px rgba(0,0,0,.08);
+
+}
+
+.policy-card h1{
+
+    text-align:center;
+
+    color:var(--brand);
+
+    margin-bottom:10px;
+
+    font-size:40px;
+
+}
+
+.date{
+
+    text-align:center;
+
+    color:#777;
+
+    margin-bottom:35px;
+
+}
+
+.policy-card h2{
+
+    margin-top:35px;
+
+    color:var(--brand-dark);
+
+    border-left:5px var(--border);
+
+    padding-left:12px;
+
+    margin-bottom:15px;
+
+}
+
+.policy-card h3{
+
+    margin-top:20px;
+
+    color:#444;
+
+}
+
+.policy-card p{
+
+    margin:15px 0;
+
+}
+
+.policy-card ul{
+
+    margin-left:25px;
+
+    margin-top:10px;
+
+}
+
+.policy-card li{
+
+    margin-bottom:8px;
+
+}
+
+@media(max-width:768px){
+
+.policy-card{
+
+padding:25px;
+
+}
+
+.policy-card h1{
+
+font-size:30px;
+
+}
+
+.policy-card h2{
+
+font-size:22px;
+
+}
+
+}
+
+
+
+
   </style>
 </head>
 <body>
@@ -186,7 +291,7 @@
     </a>
   <div class="nav-links">
     <a href="index.html" >Home</a>
-    <a href="about.html" class="active">About</a>
+    <a href="about.html">About</a>
     <a href="features.html">Features</a>
     <a href="dashboard.html">Dashboard</a>
     <a href="team.html">Team</a>
@@ -210,8 +315,8 @@
 <aside class="sidebar" id="sidebar">
   <div class="sb-section">
     <div class="sb-label">Main</div>
-    <a href="index.html" class="sb-link"><span class="si">🏠</span><span class="sl">Home</span></a>
-    <a href="about.html" class="sb-link active"><span class="si">ℹ️</span><span class="sl">About</span></a>
+    <a href="index.html" class="sb-link active"><span class="si">🏠</span><span class="sl">Home</span></a>
+    <a href="about.html" class="sb-link"><span class="si">ℹ️</span><span class="sl">About</span></a>
     <a href="features.html" class="sb-link"><span class="si">⭐</span><span class="sl">Features</span></a>
     <a href="team.html" class="sb-link"><span class="si">👥</span><span class="sl">Team</span></a>
     <a href="contact.html" class="sb-link"><span class="si">📬</span><span class="sl">Contact</span></a>
@@ -241,100 +346,414 @@
 
     <!-- MAIN -->
   <main class="main" id="mainArea">
-    <div class="page-header">
-      <div class="page-eyebrow">About the Project</div>
-      <div class="page-title">Smart Refinery Intelligence Platform</div>
-      <div class="page-sub">An AI-powered, full-stack operations management system developed by interns at IOCL Guwahati Refinery to modernize plant monitoring, maintenance, and decision-making.</div>
+    
+
+<div class="policy-container">
+
+    <div class="policy-card">
+
+        <h1>Privacy Policy</h1>
+        <p>
+            Welcome to <strong>RefineX</strong>. Your privacy is important to us.
+            This Privacy Policy explains how RefineX collects, uses, stores,
+            and protects your information when you use our platform.
+        </p>
+
+        <section>
+            <h2>1. Information We Collect</h2>
+
+            <h3>Personal Information</h3>
+            <ul>
+                <li>Name</li>
+                <li>Email Address</li>
+                <li>Organization or Company Name</li>
+                <li>Contact Information</li>
+            </ul>
+
+            <h3>Equipment Information</h3>
+            <ul>
+                <li>Equipment Details</li>
+                <li>Sensor Values</li>
+                <li>Maintenance History</li>
+                <li>Uploaded Equipment Images</li>
+                <li>Machine Health Reports</li>
+            </ul>
+
+            <h3>Technical Information</h3>
+            <ul>
+                <li>IP Address</li>
+                <li>Browser Type</li>
+                <li>Operating System</li>
+                <li>Device Information</li>
+                <li>Cookies</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>2. How We Use Your Information</h2>
+
+            <ul>
+                <li>Analyze equipment health.</li>
+                <li>Generate predictive maintenance insights.</li>
+                <li>Estimate Remaining Useful Life (RUL).</li>
+                <li>Classify equipment status.</li>
+                <li>Improve AI model performance.</li>
+                <li>Provide customer support.</li>
+                <li>Improve security and platform reliability.</li>
+            </ul>
+
+        </section>
+
+        <section>
+            <h2>3. AI-Based Analysis</h2>
+
+            <p>
+                RefineX uses Artificial Intelligence and Machine Learning models
+                to analyze uploaded equipment data and images. Predictions are
+                intended as decision-support recommendations and should not be
+                considered guaranteed outcomes.
+            </p>
+
+            <p>
+                Users remain responsible for verifying maintenance actions before
+                implementation.
+            </p>
+
+        </section>
+
+        <section>
+
+            <h2>4. Data Storage</h2>
+
+            <p>Your information may be securely stored for:</p>
+
+            <ul>
+                <li>Analysis</li>
+                <li>Maintenance History</li>
+                <li>Platform Improvement</li>
+                <li>Backup & Recovery</li>
+            </ul>
+
+        </section>
+
+        <section>
+
+            <h2>5. Cookies</h2>
+
+            <p>Cookies may be used to:</p>
+
+            <ul>
+                <li>Maintain Sessions</li>
+                <li>Remember Preferences</li>
+                <li>Improve Website Performance</li>
+                <li>Analyze Platform Usage</li>
+            </ul>
+
+        </section>
+
+        <section>
+
+            <h2>6. Data Sharing</h2>
+
+            <p>We do not sell your personal information.</p>
+
+            <p>Information may only be shared:</p>
+
+            <ul>
+                <li>With authorized service providers.</li>
+                <li>When required by law.</li>
+                <li>To protect platform security.</li>
+                <li>With your consent.</li>
+            </ul>
+
+        </section>
+
+        <section>
+
+            <h2>7. Data Security</h2>
+
+            <p>
+                We implement appropriate technical and organizational security
+                measures to safeguard your information. However, no online
+                platform can guarantee absolute security.
+            </p>
+
+        </section>
+
+        <section>
+
+            <h2>8. User Responsibilities</h2>
+
+            <ul>
+                <li>Provide accurate information.</li>
+                <li>Protect account credentials.</li>
+                <li>Upload safe and valid files.</li>
+                <li>Review AI recommendations before implementation.</li>
+            </ul>
+
+        </section>
+
+        <section>
+
+            <h2>9. Your Rights</h2>
+
+            <ul>
+                <li>Access your information.</li>
+                <li>Correct inaccurate information.</li>
+                <li>Request deletion of data.</li>
+                <li>Withdraw consent where applicable.</li>
+            </ul>
+
+        </section>
+
+        <section>
+
+            <h2>10. Changes to this Policy</h2>
+
+            <p>
+                RefineX may update this Privacy Policy from time to time.
+                Continued use of the platform constitutes acceptance of the
+                revised policy.
+            </p>
+
+        </section>
+
+        <section>
+
+            <h2>11. Contact Us</h2>
+
+            <p>Email: refinex.support@gmail.com</p>
+
+        </section>
+
     </div>
 
-    <!-- Vision Mission Objectives -->
-    <div class="section">
-      <div class="section-title">Vision, Mission & Objectives</div>
-      <div class="vmg-grid">
-        <div class="vmg-card">
-          <div class="vmg-icon">🔭</div>
-          <div class="vmg-label">Vision</div>
-          <h3>A Digitally Intelligent Refinery</h3>
-          <p>To transform IOCL Guwahati Refinery into a fully data-driven, AI-augmented operation where every decision is backed by real-time intelligence.</p>
-        </div>
-        <div class="vmg-card">
-          <div class="vmg-icon">🎯</div>
-          <div class="vmg-label">Mission</div>
-          <h3>Empower Operators with AI</h3>
-          <p>Deliver an integrated platform that reduces downtime, prevents failures before they occur, and gives every operator actionable insights at a glance.</p>
-        </div>
-        <div class="vmg-card">
-          <div class="vmg-icon">📌</div>
-          <div class="vmg-label">Objectives</div>
-          <h3>Measure, Predict, Optimize</h3>
-          <p>Track KPIs in real time, predict equipment failures using ML, forecast production accurately, and provide a unified interface for all refinery operations.</p>
-        </div>
-      </div>
+</div>
 
-      <!-- Problem & Solution -->
-      <div class="problem-box">
-        <h3>⚠ Problem Statement</h3>
-        <ul class="problem-list">
-          <li>Equipment failures are detected reactively — only after breakdown occurs, causing unplanned downtime.</li>
-          <li>Production data is siloed across departments, making holistic analysis difficult for leadership.</li>
-          <li>Maintenance scheduling is largely manual and calendar-based, not condition-based.</li>
-          <li>Incident management lacks AI-powered severity classification and trend analysis.</li>
-          <li>No unified digital dashboard for all plant KPIs, safety scores, and energy consumption.</li>
-        </ul>
-      </div>
-      <div class="solution-box">
-        <h3>✅ Proposed Solution</h3>
-        <ul class="solution-list">
-          <li>ML-powered predictive maintenance using Random Forest & XGBoost on real sensor data.</li>
-          <li>Unified executive dashboard with all KPIs, trends, and AI-generated summaries.</li>
-          <li>Condition-based maintenance planner with work order management and calendar view.</li>
-          <li>AI incident severity classifier using TF-IDF + Random Forest / DistilBERT.</li>
-          <li>Interactive 3D Digital Twin of the refinery for visual plant health monitoring.</li>
-        </ul>
-      </div>
+
+<div class="policy-container">
+
+    <div class="policy-card">
+
+        <h1>Terms & Conditions</h1>
+
+        <p>
+            Welcome to <strong>RefineX</strong>. By accessing or using our platform,
+            you agree to comply with these Terms and Conditions. If you do not
+            agree with any part of these terms, please discontinue use of the
+            platform.
+        </p>
+
+        <section>
+
+            <h2>1. Acceptance of Terms</h2>
+
+            <p>
+                By accessing or using RefineX, you acknowledge that you have read,
+                understood, and agreed to these Terms and Conditions.
+            </p>
+
+        </section>
+
+        <section>
+
+            <h2>2. Purpose of the Platform</h2>
+
+            <p>
+                RefineX is an AI-powered refinery monitoring and Digital Twin
+                platform designed to assist industries with:
+            </p>
+
+            <ul>
+                <li>Predictive Maintenance</li>
+                <li>Equipment Health Monitoring</li>
+                <li>Remaining Useful Life (RUL) Estimation</li>
+                <li>Fault Detection</li>
+                <li>Operational Analytics</li>
+                <li>Industrial Asset Visualization</li>
+            </ul>
+
+            <p>
+                The platform is intended to support maintenance planning and
+                operational decision-making only.
+            </p>
+
+        </section>
+
+        <section>
+
+            <h2>3. User Accounts</h2>
+
+            <p>Users agree to:</p>
+
+            <ul>
+                <li>Provide accurate registration information.</li>
+                <li>Maintain the confidentiality of login credentials.</li>
+                <li>Notify RefineX immediately of unauthorized account access.</li>
+                <li>Use the platform responsibly and lawfully.</li>
+            </ul>
+
+            <p>
+                Users are solely responsible for all activities performed using
+                their accounts.
+            </p>
+
+        </section>
+
+        <section>
+
+            <h2>4. Acceptable Use</h2>
+
+            <p>Users must not:</p>
+
+            <ul>
+                <li>Upload false or misleading equipment information.</li>
+                <li>Upload malicious software or harmful files.</li>
+                <li>Attempt unauthorized access to the platform.</li>
+                <li>Interfere with platform functionality or security.</li>
+                <li>Reverse engineer any software or AI models.</li>
+                <li>Use RefineX for illegal or unauthorized purposes.</li>
+            </ul>
+
+        </section>
+
+        <section>
+
+            <h2>5. AI Predictions</h2>
+
+            <p>
+                RefineX uses Artificial Intelligence and Machine Learning models
+                to generate maintenance recommendations and equipment health
+                predictions.
+            </p>
+
+            <p>
+                These predictions are estimates based on available data and should
+                not be considered guaranteed results.
+            </p>
+
+            <p>
+                Final operational and maintenance decisions remain the
+                responsibility of qualified engineers and maintenance personnel.
+            </p>
+
+        </section>
+
+        <section>
+
+            <h2>6. Intellectual Property</h2>
+
+            <p>
+                All software, algorithms, dashboards, graphics, logos,
+                documentation, AI models, trademarks, and platform content are
+                the intellectual property of RefineX unless otherwise stated.
+            </p>
+
+            <p>
+                Users may not reproduce, copy, distribute, modify, or exploit any
+                portion of the platform without prior written permission.
+            </p>
+
+        </section>
+
+        <section>
+
+            <h2>7. Limitation of Liability</h2>
+
+            <p>
+                RefineX is provided as an analytical and decision-support tool.
+                We are not liable for:
+            </p>
+
+            <ul>
+                <li>Equipment failures</li>
+                <li>Production downtime</li>
+                <li>Financial losses</li>
+                <li>Loss of business</li>
+                <li>Loss of data</li>
+                <li>Indirect or consequential damages arising from platform use</li>
+            </ul>
+
+            <p>
+                Users assume full responsibility for maintenance decisions based
+                on AI-generated recommendations.
+            </p>
+
+        </section>
+
+        <section>
+
+            <h2>8. Platform Availability</h2>
+
+            <p>
+                We strive to maintain continuous service but cannot guarantee
+                uninterrupted platform availability. Scheduled maintenance,
+                updates, or unforeseen technical issues may temporarily affect
+                access.
+            </p>
+
+        </section>
+
+        <section>
+
+            <h2>9. Privacy</h2>
+
+            <p>
+                Your use of RefineX is also governed by our Privacy Policy.
+                By using the platform, you acknowledge that your information
+                will be handled in accordance with that policy.
+            </p>
+
+        </section>
+
+        <section>
+
+            <h2>10. Account Suspension or Termination</h2>
+
+            <p>
+                RefineX reserves the right to suspend or terminate user accounts
+                that violate these Terms or engage in unauthorized or malicious
+                activities.
+            </p>
+
+        </section>
+
+        <section>
+
+            <h2>11. Changes to these Terms</h2>
+
+            <p>
+                We may update these Terms and Conditions periodically.
+                Continued use of RefineX after updates constitutes acceptance of
+                the revised Terms.
+            </p>
+
+        </section>
+
+        <section>
+
+            <h2>12. Governing Law</h2>
+
+            <p>
+                These Terms and Conditions shall be governed by the laws of India.
+                Any disputes arising from the use of RefineX shall be subject to
+                the jurisdiction of the competent courts in India.
+            </p>
+
+        </section>
+
+        <section>
+
+            <h2>13. Contact Information</h2>
+
+            <p>For any questions regarding these Terms and Conditions, please contact us at:</p>
+            <p><strong>Email:</strong> refinex.support@gmail.com</p>
+
+        </section>
+
     </div>
 
-    <!-- Key Benefits -->
-    <div class="section" style="padding-top:0;">
-      <div class="section-title">Key Benefits</div>
-      <div class="benefit-list">
-        <div class="benefit"><div class="benefit-check">⬆</div><div><h4>Increased Efficiency</h4><p>Real-time monitoring and AI insights improve plant availability and throughput by reducing unplanned stoppages.</p></div></div>
-        <div class="benefit"><div class="benefit-check">🔧</div><div><h4>Reduced Downtime</h4><p>Predictive models identify failure risk 7–30 days in advance, enabling proactive maintenance scheduling.</p></div></div>
-        <div class="benefit"><div class="benefit-check">🧠</div><div><h4>Better Decision Making</h4><p>AI Insights Engine combines all model outputs to give leadership a clear, prioritized view of what needs attention.</p></div></div>
-        <div class="benefit"><div class="benefit-check">🛡️</div><div><h4>Improved Safety</h4><p>Safety KPI tracking, incident trend analysis, and automatic severity classification reduce risk and improve compliance.</p></div></div>
-        <div class="benefit"><div class="benefit-check">💡</div><div><h4>Innovation Culture</h4><p>The Innovation Hub empowers every employee to submit ideas, vote, and contribute to continuous improvement.</p></div></div>
-        <div class="benefit"><div class="benefit-check">🌱</div><div><h4>Sustainability Tracking</h4><p>Carbon emission dashboard tracks CO₂, water consumption, and energy intensity to support ESG goals.</p></div></div>
-      </div>
-    </div>
-
-    <!-- Architecture -->
-    <div class="section" style="padding-top:0;">
-      <div class="section-title">Architecture Overview</div>
-      <div class="arch-row">
-        <div class="arch-layer">
-          <div class="arch-layer-label">Frontend</div>
-          <h4>UI / UX Layer</h4>
-          <p>HTML · CSS · JavaScript · Chart.js · Three.js for 3D twin</p>
-        </div>
-        <div class="arch-layer">
-          <div class="arch-layer-label">Backend</div>
-          <h4>API Layer</h4>
-          <p>Flask REST APIs · Python · MongoDB · JWT Auth</p>
-        </div>
-        <div class="arch-layer">
-          <div class="arch-layer-label">AI / ML</div>
-          <h4>Intelligence Layer</h4>
-          <p>Random Forest · XGBoost · Prophet · ARIMA · DistilBERT</p>
-        </div>
-        <div class="arch-layer">
-          <div class="arch-layer-label">LLM</div>
-          <h4>AI Assistant</h4>
-          <p>Gemini / OpenAI API for natural language Q&amp;A and auto insights</p>
-        </div>
-      </div>
-    </div>
-
-
+</div>
   <!-- FOOTER -->
   <footer>
     <div class="ft-grid">
